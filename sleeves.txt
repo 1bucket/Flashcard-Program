@@ -1,0 +1,30 @@
+Maths/
+Español
+Maths/Español/
+Govt
+Maths/Español/Govt/
+Compsci
+
+Maths
+Maths/Español/
+Ans
+not merge test/aerg/
+sdf
+not merge test/aerg/sdf/
+whack
+not merge test/
+aerg
+not merge test/aerg/sdf/
+ads
+not merge test/aerg/sdf/whack/
+ads
+not merge test/aerg/sdf/ads/
+riu
+not merge test/aerg/sdf/whack/ads/
+eiur
+
+not merge test
+Maths/Español/
+Vocab
+Maths/Español/Vocab/
+School
