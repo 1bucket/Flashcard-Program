@@ -37,3 +37,6 @@ serg
 Maths/Español/Vocab/
 el lapiz
 pencil
+not merge test/aerg/sdf/whack/ads/eiur/
+s
+s

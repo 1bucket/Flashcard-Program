@@ -40,18 +40,23 @@ public class Navigator extends JPanel implements ActionListener{
 
         constrs.gridx = 0;
         constrs.gridy = 0;
-        constrs.gridwidth = 2;
+        // constrs.gridwidth = 2;
         pathLabel = new JLabel("Path: " + currentPath);
         add(pathLabel, constrs);
-        constrs.gridy = 1;
-        constrs.gridwidth = 1;
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        // constrs.gridy = 1;
+        // constrs.gridwidth = 1;
         prevSleeve = new JButton("<");
         prevSleeve.addActionListener(this);
-        add(prevSleeve, constrs);
+        buttonPanel.add(prevSleeve, constrs);
         constrs.gridx = 1;
         nextSleeve = new JButton(">");
         nextSleeve.addActionListener(this);
-        add(nextSleeve, constrs);
+        buttonPanel.add(nextSleeve, constrs);
+        constrs.gridx = 0;
+        constrs.gridy = 1;
+        add(buttonPanel, constrs);
         refresh();
     }
 
@@ -73,7 +78,19 @@ public class Navigator extends JPanel implements ActionListener{
     private void refresh() {
         prevSleeve.setEnabled(currentPath.indexOf("/") >= 0);
         nextSleeve.setEnabled(nextPaths.size() != 0);
-        pathLabel.setText("Path: " + currentPath);
+        int pathLen = currentPath.length();
+        // pathLabel.setText("Path: " + currentPath);
+        String label = "Path: ";
+        if (pathLen > 20) {
+            int lastSleeveIndex = currentPath.lastIndexOf("/");
+            int secondLastSleeveIndex = currentPath.substring(0, lastSleeveIndex).lastIndexOf("/");
+            String truncated = "..." + currentPath.substring(currentPath.substring(0, secondLastSleeveIndex).lastIndexOf("/"));
+            label += truncated;
+        }
+        else {
+            label += currentPath;
+        }
+        pathLabel.setText(label);
     }
 
     public String getPath() {

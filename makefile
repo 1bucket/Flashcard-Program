@@ -1,6 +1,6 @@
 default: run
 
-run: Driver.class
+run: Driver.class Manage.class
 	java Driver
 
 clean:
@@ -8,3 +8,6 @@ clean:
 
 Driver.class: Driver.java
 	javac Driver.java
+
+Manage.class: Manage.java
+	javac Manage.java

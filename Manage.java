@@ -193,9 +193,11 @@ public class Manage extends Page implements ActionListener{
 
         // labels
 
-        constrs.gridx = 1;
-        constrs.gridy = 2;
-        // pathLabel = new JLabel("Path: " + currentPath);
+        // constrs.gridx = 1;
+        // constrs.gridy = 2;
+        // int pathLen = currentPath.length();
+        // JLabel pathLabel = new JLabel("Path: " + (pathLen > 30 ? ".../" + currentPath.substring(pathLen - 10): currentPath));
+        // JLabel pathLabel = new JLabel("Path: ");
         // pathLabel.setHorizontalAlignment(JLabel.CENTER);
         // masterPanel.add(pathLabel, constrs);
 
@@ -338,7 +340,7 @@ public class Manage extends Page implements ActionListener{
         addToStudy.setEnabled(isSelSizeNonzero && selHasNonStudyFCs);            
         removeFromStudy.setEnabled(isSelSizeNonzero);
         clearStudy.setEnabled(isStudySizeNonzero);
-        System.out.println(selFCSize + selSleeveSize);
+        // System.out.println(selFCSize + selSleeveSize);
         boolean isOnlyOneSel = selFCSize + selSleeveSize == 1;
         // System.out.println("1: " + isOnlyOneSel);
         edit.setEnabled(isOnlyOneSel);
@@ -896,16 +898,16 @@ public class Manage extends Page implements ActionListener{
     }
 
     private void addSleeveToStudy(Sleeve sleeve) {
-        // String path = sleeve.getPath() + sleeve.getName() + "/";
-        // // ArrayList<Flashcard> study = studyStack.getStack();
-        // // for (Flashcard fc : findFCsUnder(path)) {
-        // //     if (study.indexOf(fc) == -1) {
-        // //         study.add(fc);
-        // //     }
-        // // }
-        // for (Sleeve innerSleeve : findSleevesUnder(path)) {
-        //     addSleeveToStudy(innerSleeve);
-        // }
+        String path = sleeve.getPath() + sleeve.getName() + "/";
+        ArrayList<Flashcard> study = studyStack.getStack();
+        for (Flashcard fc : findFCsUnder(path)) {
+            if (study.indexOf(fc) == -1) {
+                study.add(fc);
+            }
+        }
+        for (Sleeve innerSleeve : findSleevesUnder(path)) {
+            addSleeveToStudy(innerSleeve);
+        }
     }
 
     private String prevPath(String path) {
