@@ -1,7 +1,7 @@
 
 biblioteca
 library
-
+not merge test/
 árbol
 tree
 ads/sdf/whack/

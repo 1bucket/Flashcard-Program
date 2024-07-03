@@ -84,31 +84,34 @@ public class Mover implements ActionListener {
         setPath(newPath);
     }
 
-    // private ArrayList<Flashcard> removeFCDupes(ArrayList<Flashcard> mainList, ArrayList<Flashcard> checkList) {
-    //     Stack<Flashcard> check = new Stack(checkList);
-    //     for (int index = 0; mainList.size() > 0 && check.size() > 0; index = (index + 1) % mainList.size()) {
-    //         if (mainList.get(index).equals(check.peek())) {
-    //             check.pop();
-    //             mainList.remove(index);
-    //             index = 0;
-    //         }
-    //     }
-    //     return mainList;
-    // }
+    private ArrayList<Flashcard> removeFCDupes(ArrayList<Flashcard> mainList, ArrayList<Flashcard> checkList) {
+        // System.out.println(mainList.size());
+        if (mainList.size() < 1) return mainList;
+        Stack<Flashcard> check = new Stack(checkList);
+        for (int index = 0; mainList.size() > 0 && check.size() > 0; index += 1) {
+            index %= mainList.size();
+            if (mainList.get(index).equals(check.peek())) {
+                check.pop();
+                mainList.remove(index);
+                index = 0;
+            }
+        }
+        return mainList;
+    }
 
-    // private ArrayList<Sleeve> removeSleeveDupes(ArrayList<Sleeve> mainList, ArrayList<Sleeve> checkList) {
-    //     Stack<Sleeve> check = new Stack(checkList);
-    //     for (int index = 0; mainList.size() > 0 && check.size() > 0; index = (index + 1) % mainList.size()) {
-    //         // Sleeve w = mainList.get(index);
-    //         // System.out.println(w + "[]\n" + check.peek());
-    //         if (mainList.get(index).equals(check.peek())) {
-    //             check.pop();
-    //             mainList.remove(index);
-    //             index = -1;
-    //         }
-    //     }
-    //     return mainList;
-    // } 
+    private ArrayList<Sleeve> removeSleeveDupes(ArrayList<Sleeve> mainList, ArrayList<Sleeve> checkList) {
+        Stack<Sleeve> check = new Stack(checkList);
+        for (int index = 0; mainList.size() > 0 && check.size() > 0; index = (index + 1) % mainList.size()) {
+            // Sleeve w = mainList.get(index);
+            // System.out.println(w + "[]\n" + check.peek());
+            if (mainList.get(index).equals(check.peek())) {
+                check.pop();
+                mainList.remove(index);
+                index = -1;
+            }
+        }
+        return mainList;
+    } 
 
     public void refresh() {
         if (disp != null) {
@@ -118,7 +121,7 @@ public class Mover implements ActionListener {
         display.setLayout(new GridBagLayout());
         GridBagConstraints constrs = new GridBagConstraints();
         constrs.gridx = 0;
-        ArrayList<Sleeve> currentSleeves = new Stack().removeDupes(Manage.findSleevesUnder(curPath), sleeves);
+        ArrayList<Sleeve> currentSleeves = removeSleeveDupes(Manage.findSleevesUnder(curPath), sleeves);
         int numSleeves = 0;
         for (Sleeve sleeve : currentSleeves) {
             constrs.gridy = numSleeves;
@@ -132,7 +135,7 @@ public class Mover implements ActionListener {
             display.add(sleeveButton, constrs);
             numSleeves++;
         }
-        ArrayList<Flashcard> currentFCs = new Stack().removeDupes(Manage.findFCsUnder(curPath), fcs);
+        ArrayList<Flashcard> currentFCs = removeFCDupes(Manage.findFCsUnder(curPath), fcs);
         for (int numFCs = 0; numFCs < currentFCs.size(); numFCs++) {
             constrs.gridy = numFCs + numSleeves;
             JButton fcButton = new JButton(currentFCs.get(numFCs).getPrompt());
@@ -150,7 +153,7 @@ public class Mover implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        System.out.println(root.selectedFCs.size());
+        // System.out.println(root.selectedFCs.size());
         root.move(sleeves, fcs, curPath);
         // root.save();
         root.disposeMover();
