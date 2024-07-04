@@ -1,4 +1,8 @@
+import java.util.ArrayList;
+
 public class Flashcard {
+    public static final int PROMPT = 0;
+    public static final int RESP = 1;
 
     // fields
     // private String subject;
@@ -7,12 +11,43 @@ public class Flashcard {
     private String sleevePath;
     private String prompt;
     private String response;
+    private ArrayList<String> promptImgs;
+    private ArrayList<String> respImgs;
 
     // constructor
     public Flashcard(String setPath, String setPrompt, String setResponse) {
         sleevePath = setPath;
         prompt = setPrompt;
         response = setResponse;
+        promptImgs = new ArrayList<String>();
+        respImgs = new ArrayList<String>();
+    }
+
+    public Flashcard(String setPath, String setPrompt, String setResponse, ArrayList<String> setPromptImgs, ArrayList<String> setRespImgs) {
+        this(setPath, setPrompt, setResponse);
+        if (setPromptImgs != null) {
+            promptImgs = setPromptImgs;
+        }
+        if (setRespImgs != null) {
+            respImgs = setRespImgs;
+        }
+        filterImgPaths();
+    }
+
+    private void filterImgPaths() {
+        // filter out paths of ""
+        for (int index = 0; index < promptImgs.size(); index += 1) {
+            if (promptImgs.get(index) == "") {
+                promptImgs.remove(index);
+                index -= 1;
+            }
+        }
+        for (int index = 0; index < respImgs.size(); index += 1) {
+            if (respImgs.get(index) == "") {
+                respImgs.remove(index);
+                index -= 1;
+            }
+        }
     }
 
     // toString method
@@ -33,6 +68,29 @@ public class Flashcard {
         response = newResponse;
     }
 
+    public void addImg(String newPath, int category) {
+        if (newPath != null && newPath != "") {
+            if (category == PROMPT) {
+                promptImgs.add(newPath);
+            }
+            else if (category == RESP) {
+                respImgs.add(newPath);
+            }
+        }
+    }
+
+    public void removePromptImg(String path, int category) {
+        if (category == PROMPT) {
+            promptImgs.remove(path);
+        }
+        else if (category == RESP) {
+            respImgs.remove(path);
+        }
+        else {
+            System.out.println("Error: invalid img category for Flashcard")
+        }
+    }
+
     // getters
     public String getPath() {
         return sleevePath;
@@ -44,6 +102,14 @@ public class Flashcard {
 
     public String getResponse() {
         return response;
+    }
+
+    public ArrayList<String> getPromptImgs() {
+        return promptImgs;
+    }
+
+    public ArrayList<String> getRespImgs() {
+        return respImgs;
     }
 
     public boolean equals(Flashcard fc) {
