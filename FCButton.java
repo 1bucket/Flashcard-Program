@@ -7,6 +7,10 @@ import java.awt.Container;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class FCButton extends JButton implements ActionListener{
     private Flashcard fc;
@@ -14,6 +18,7 @@ public class FCButton extends JButton implements ActionListener{
     // private HolderPane parent;
     private boolean isStudyCard;
     private Manage root;
+    private BufferedImage img;
 
     // public FCButton(String title, Flashcard fc, boolean isStudyCard) {
     //     this(title, fc, null, isStudyCard);
@@ -25,11 +30,28 @@ public class FCButton extends JButton implements ActionListener{
         // this.parent = parent;
         this.root = root;
         this.isStudyCard = isStudyCard;
+        if (fc.getPromptImgs() != null && fc.getPromptImgs().size() > 0) {
+            try {
+                // setIcon(new ImageIcon(fc.getPromptImgs().get(0)));
+                img = ImageIO.read(new File(fc.getPromptImgs().get(0)));
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                System.exit(0);
+            }
+            // System.out.println("hello");
+        }
         resp = new JLabel(fc.getResponse());
         // setBackground(new Color(196, 255, 197));
         // setOpaque(true);
         // setBorderPainted(false);
         addActionListener(this);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(img, 0, 0, img.getWidth(null) / 100, img.getHeight(null) / 100, null);
     }
 
     public void actionPerformed(ActionEvent e) {

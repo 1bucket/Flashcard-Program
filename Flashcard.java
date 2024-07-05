@@ -87,7 +87,7 @@ public class Flashcard {
             respImgs.remove(path);
         }
         else {
-            System.out.println("Error: invalid img category for Flashcard")
+            System.out.println("Error: invalid img category for Flashcard");
         }
     }
 

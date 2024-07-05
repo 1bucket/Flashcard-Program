@@ -489,7 +489,36 @@ public class Manage extends Page implements ActionListener{
                 String sleevePath = scanner.nextLine();
                 String prompt = scanner.nextLine();
                 String response = scanner.nextLine();
-                masterFCs.add(new Flashcard(sleevePath, prompt, response));
+                Flashcard newFC = new Flashcard(sleevePath, prompt, response);
+                masterFCs.add(newFC);
+
+                String promptImgsPath = scanner.nextLine();
+                if (promptImgsPath != "\n") {
+                    File promptImgs = new File(promptImgsPath);
+                    if (promptImgs.isDirectory()) {
+                        for (String path : promptImgs.list()) {
+                            newFC.addImg(path, Flashcard.PROMPT);
+                        }
+                    }
+                    else {
+                        newFC.addImg(promptImgsPath, Flashcard.PROMPT);
+                    }
+                }
+                // System.out.println("p---\n" + promptImgsPath + "\n---p");
+                String respImgsPath = scanner.nextLine();
+                if (respImgsPath != "\n") {
+                    File respImgs = new File(respImgsPath);
+                    if (respImgs.isDirectory()) {
+                        for (String path : respImgs.list()) {
+                            newFC.addImg(path, Flashcard.RESP);
+                        }
+                    }
+                    else {
+                        newFC.addImg(respImgsPath, Flashcard.RESP);
+                    }
+                }
+                
+                // System.out.println("r---\n" + respImgsPath + "\n---r");
                 }
             scanner.close();
             return masterStack;
