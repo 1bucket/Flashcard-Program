@@ -60,6 +60,7 @@ public class HolderPane extends JPanel implements ItemListener, ActionListener{
         constrs.fill = GridBagConstraints.BOTH;
         heldFC = fc;
         fcButton = new FCButton(heldFC, root, isInStudy);
+        fcButton.adaptSize();
         
         add(fcButton, constrs);
         

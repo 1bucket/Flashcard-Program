@@ -22,6 +22,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import java.awt.Graphics;
+import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class Manage extends Page implements ActionListener{
     // Deletion modes
@@ -458,13 +463,69 @@ public class Manage extends Page implements ActionListener{
                 if (curFC.equals(openCard)) {
                     openCardCt++;
                     constrs.gridy++;
-                    JLabel resp = new JLabel(curFC.getResponse());
+                    // JLabel resp = new JLabel(curFC.getResponse());
+                    // JLabel resp = new JLabel() {
+                    //     @Override
+                    //     protected void paintComponent(Graphics g) {
+                    //         super.paintComponent(g);
+                    //     }
+                    // }
+                    // System.out.println("aef");
+                    JLabel resp = getRespComponent(curFC);
                     resp.setHorizontalAlignment(JLabel.CENTER);
                     disp.add(resp, constrs);              
                 }
             }
             // System.out.println(openCards.size());
         }
+    }
+
+    private JLabel getRespComponent(Flashcard fc) {
+        JLabel resp = new JLabel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(Color.WHITE);
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g.setColor(Color.BLACK);
+                System.out.println("r---\n" + fc.getRespImg() + "\n---r");
+                if (fc.getRespImg() != "") {
+                    try {
+                        BufferedImage img = ImageIO.read(new File(fc.getRespImg()));
+                        int w = img.getWidth(null) / FCButton.getImgShrinkFactor();
+                        int h = img.getHeight(null) / FCButton.getImgShrinkFactor();
+                        g.drawImage(img, 10, 10, w, h, null);
+                        g.drawString(fc.getResponse(), 10, h + 25);
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                        System.exit(0);
+                    }
+                }
+                else {
+                    System.out.println("hi");
+                    g.drawString(fc.getResponse(), 10, 35);
+                }
+            }
+        };
+        if (fc.getRespImg() != "") {
+            System.out.println("here");
+            try {
+                BufferedImage img = ImageIO.read(new File(fc.getRespImg()));
+                int w = img.getWidth(null) / FCButton.getImgShrinkFactor();
+                int h = img.getHeight(null) / FCButton.getImgShrinkFactor();
+                resp.setPreferredSize(new Dimension(w + 20, h + 40));
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                System.exit(0);
+            }
+        }
+        else {
+            System.out.println("hello");
+            // resp.setMinimumSize(new Dimension(100, 45));
+        }
+        return resp;
     }
 
     private JPanel getFiller(Color color) {
@@ -492,30 +553,32 @@ public class Manage extends Page implements ActionListener{
                 Flashcard newFC = new Flashcard(sleevePath, prompt, response);
                 masterFCs.add(newFC);
 
-                String promptImgsPath = scanner.nextLine();
-                if (promptImgsPath != "\n") {
-                    File promptImgs = new File(promptImgsPath);
-                    if (promptImgs.isDirectory()) {
-                        for (String path : promptImgs.list()) {
-                            newFC.addImg(path, Flashcard.PROMPT);
-                        }
-                    }
-                    else {
-                        newFC.addImg(promptImgsPath, Flashcard.PROMPT);
-                    }
+                String promptImgPath = scanner.nextLine();
+                if (promptImgPath != "\n") {
+                    // File promptImgs = new File(promptImgsPath);
+                    // if (promptImgs.isDirectory()) {
+                    //     for (String path : promptImgs.list()) {
+                    //         newFC.addImg(path, Flashcard.PROMPT);
+                    //     }
+                    // }
+                    // else {
+                    //     newFC.addImg(promptImgsPath, Flashcard.PROMPT);
+                    // }
+                    newFC.setPromptImg(promptImgPath);
                 }
                 // System.out.println("p---\n" + promptImgsPath + "\n---p");
-                String respImgsPath = scanner.nextLine();
-                if (respImgsPath != "\n") {
-                    File respImgs = new File(respImgsPath);
-                    if (respImgs.isDirectory()) {
-                        for (String path : respImgs.list()) {
-                            newFC.addImg(path, Flashcard.RESP);
-                        }
-                    }
-                    else {
-                        newFC.addImg(respImgsPath, Flashcard.RESP);
-                    }
+                String respImgPath = scanner.nextLine();
+                if (respImgPath != "\n") {
+                    // File respImgs = new File(respImgsPath);
+                    // if (respImgs.isDirectory()) {
+                    //     for (String path : respImgs.list()) {
+                    //         newFC.addImg(path, Flashcard.RESP);
+                    //     }
+                    // }
+                    // else {
+                    //     newFC.addImg(respImgsPath, Flashcard.RESP);
+                    // }
+                    newFC.setRespImg(respImgPath);
                 }
                 
                 // System.out.println("r---\n" + respImgsPath + "\n---r");

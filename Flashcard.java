@@ -11,44 +11,44 @@ public class Flashcard {
     private String sleevePath;
     private String prompt;
     private String response;
-    private ArrayList<String> promptImgs;
-    private ArrayList<String> respImgs;
+    private String promptImg;
+    private String respImg;
 
     // constructor
     public Flashcard(String setPath, String setPrompt, String setResponse) {
         sleevePath = setPath;
         prompt = setPrompt;
         response = setResponse;
-        promptImgs = new ArrayList<String>();
-        respImgs = new ArrayList<String>();
+        promptImg = "";
+        respImg = "";
     }
 
-    public Flashcard(String setPath, String setPrompt, String setResponse, ArrayList<String> setPromptImgs, ArrayList<String> setRespImgs) {
+    public Flashcard(String setPath, String setPrompt, String setResponse, String setPromptImg, String setRespImg) {
         this(setPath, setPrompt, setResponse);
-        if (setPromptImgs != null) {
-            promptImgs = setPromptImgs;
+        if (setPromptImg != null) {
+            promptImg = setPromptImg;
         }
-        if (setRespImgs != null) {
-            respImgs = setRespImgs;
+        if (setRespImg != null) {
+            respImg = setRespImg;
         }
-        filterImgPaths();
+        // filterImgPaths();
     }
 
-    private void filterImgPaths() {
-        // filter out paths of ""
-        for (int index = 0; index < promptImgs.size(); index += 1) {
-            if (promptImgs.get(index) == "") {
-                promptImgs.remove(index);
-                index -= 1;
-            }
-        }
-        for (int index = 0; index < respImgs.size(); index += 1) {
-            if (respImgs.get(index) == "") {
-                respImgs.remove(index);
-                index -= 1;
-            }
-        }
-    }
+    // private void filterImgPaths() {
+    //     // filter out paths of ""
+    //     for (int index = 0; index < promptImgs.size(); index += 1) {
+    //         if (promptImgs.get(index) == "") {
+    //             promptImgs.remove(index);
+    //             index -= 1;
+    //         }
+    //     }
+    //     for (int index = 0; index < respImgs.size(); index += 1) {
+    //         if (respImgs.get(index) == "") {
+    //             respImgs.remove(index);
+    //             index -= 1;
+    //         }
+    //     }
+    // }
 
     // toString method
     public String toString() {
@@ -68,28 +68,29 @@ public class Flashcard {
         response = newResponse;
     }
 
-    public void addImg(String newPath, int category) {
+    public void setPromptImg(String newPath) {
         if (newPath != null && newPath != "") {
-            if (category == PROMPT) {
-                promptImgs.add(newPath);
-            }
-            else if (category == RESP) {
-                respImgs.add(newPath);
-            }
+            promptImg = newPath;
         }
     }
 
-    public void removePromptImg(String path, int category) {
-        if (category == PROMPT) {
-            promptImgs.remove(path);
-        }
-        else if (category == RESP) {
-            respImgs.remove(path);
-        }
-        else {
-            System.out.println("Error: invalid img category for Flashcard");
+    public void setRespImg(String newPath) {
+        if (newPath != null && newPath != "") {
+            respImg = newPath;
         }
     }
+
+    // public void removePromptImg(String path, int category) {
+    //     if (category == PROMPT) {
+    //         promptImgs.remove(path);
+    //     }
+    //     else if (category == RESP) {
+    //         respImgs.remove(path);
+    //     }
+    //     else {
+    //         System.out.println("Error: invalid img category for Flashcard");
+    //     }
+    // }
 
     // getters
     public String getPath() {
@@ -104,18 +105,20 @@ public class Flashcard {
         return response;
     }
 
-    public ArrayList<String> getPromptImgs() {
-        return promptImgs;
+    public String getPromptImg() {
+        return promptImg;
     }
 
-    public ArrayList<String> getRespImgs() {
-        return respImgs;
+    public String getRespImg() {
+        return respImg;
     }
 
     public boolean equals(Flashcard fc) {
         return sleevePath.equals(fc.getPath()) &&
                prompt.equals(fc.getPrompt()) &&
-               response.equals(fc.getResponse());
+               response.equals(fc.getResponse()) &&
+               promptImg.equals(fc.getPromptImg()) &&
+               respImg.equals(fc.getRespImg());
     }
     // for isolated testing
     public static void main(String[] args) {
