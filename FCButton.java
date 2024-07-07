@@ -77,6 +77,10 @@ public class FCButton extends JButton implements ActionListener{
             setMinimumSize(new Dimension(w + 20, h + 40));
             setPreferredSize(new Dimension(w + 20, h + 40));
         }
+        else {
+            setMinimumSize(new Dimension(75, 30));
+            setPreferredSize(new Dimension(75, 30));
+        }
     }
 
     public static int getImgShrinkFactor() {
@@ -85,6 +89,7 @@ public class FCButton extends JButton implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         // System.out.println("beep");
+        System.out.println(getWidth() + ", " + getHeight());
         if (isStudyCard) {
             if (root.getOpenStudyCards().indexOf(fc) != -1) {
                 root.closeStudyCard(fc);

@@ -472,7 +472,6 @@ public class Manage extends Page implements ActionListener{
                     // }
                     // System.out.println("aef");
                     JLabel resp = getRespComponent(curFC);
-                    resp.setHorizontalAlignment(JLabel.CENTER);
                     disp.add(resp, constrs);              
                 }
             }
@@ -481,14 +480,15 @@ public class Manage extends Page implements ActionListener{
     }
 
     private JLabel getRespComponent(Flashcard fc) {
-        JLabel resp = new JLabel() {
+        JLabel resp = new JLabel("whoa") {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.setColor(Color.WHITE);
                 g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                 g.setColor(Color.BLACK);
-                System.out.println("r---\n" + fc.getRespImg() + "\n---r");
+                // System.out.println("r---\n" + fc.getRespImg() + "\n---r");
+                System.out.println(getWidth() + ", " + getHeight());
                 if (fc.getRespImg() != "") {
                     try {
                         BufferedImage img = ImageIO.read(new File(fc.getRespImg()));
@@ -503,18 +503,22 @@ public class Manage extends Page implements ActionListener{
                     }
                 }
                 else {
-                    System.out.println("hi");
-                    g.drawString(fc.getResponse(), 10, 35);
+                    // System.out.println("hi");
+                    g.drawString(fc.getResponse(), 10, 20);
                 }
             }
         };
+
+        resp.setHorizontalAlignment(JLabel.RIGHT);
+
         if (fc.getRespImg() != "") {
-            System.out.println("here");
+            // System.out.println("here");
             try {
                 BufferedImage img = ImageIO.read(new File(fc.getRespImg()));
                 int w = img.getWidth(null) / FCButton.getImgShrinkFactor();
                 int h = img.getHeight(null) / FCButton.getImgShrinkFactor();
                 resp.setPreferredSize(new Dimension(w + 20, h + 40));
+                resp.setMinimumSize(new Dimension(w + 20, h + 40));
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -522,8 +526,9 @@ public class Manage extends Page implements ActionListener{
             }
         }
         else {
-            System.out.println("hello");
-            // resp.setMinimumSize(new Dimension(100, 45));
+            // System.out.println("hello");
+            resp.setMinimumSize(new Dimension(75, 30));
+            resp.setPreferredSize(new Dimension(75, 30));
         }
         return resp;
     }
