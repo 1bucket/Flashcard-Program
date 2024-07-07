@@ -264,7 +264,7 @@ public class Manage extends Page implements ActionListener{
         ActionListener closeFrame = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 promptWindow.dispose();
-                System.out.println("close");
+                // System.out.println("close");
             }
         };
         jeopardy.addActionListener(new ActionListener() {
@@ -281,7 +281,7 @@ public class Manage extends Page implements ActionListener{
         rand.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 studyStack.randomize();
-                System.out.println("random");
+                // System.out.println("random");
             }
         });
         rand.addActionListener(closeFrame);
@@ -488,7 +488,7 @@ public class Manage extends Page implements ActionListener{
                 g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                 g.setColor(Color.BLACK);
                 // System.out.println("r---\n" + fc.getRespImg() + "\n---r");
-                System.out.println(getWidth() + ", " + getHeight());
+                // System.out.println(getWidth() + ", " + getHeight());
                 if (fc.getRespImg() != "") {
                     try {
                         BufferedImage img = ImageIO.read(new File(fc.getRespImg()));

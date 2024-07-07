@@ -13,6 +13,12 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.awt.Image;
 
 public class Flipper extends JPanel implements ActionListener{
     private FCStack studyStack;
@@ -28,7 +34,10 @@ public class Flipper extends JPanel implements ActionListener{
     private JLabel progressTracker;
     private String prompt;
     private String response;
+    private String seePromptAgain;
     private int studySize;
+    private Image promptImg;
+    private Image respImg;
 
     public Flipper(FCStack newStack, Study newRoot) {
         super();
@@ -38,6 +47,7 @@ public class Flipper extends JPanel implements ActionListener{
         correctStack = new FCStack();
         missedStack = new FCStack();
         studySize = newStack.getStack().size();
+        seePromptAgain = "See prompt again";
 
         // JPanel
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -58,7 +68,45 @@ public class Flipper extends JPanel implements ActionListener{
     public void displayPrompt() {
         cardPanel.setVisible(false);
         cardPanel = new JPanel();
-        JButton promptCard = new JButton(prompt);
+        // JButton promptCard = new JButton(prompt);
+        JButton promptCard = new JButton(prompt){
+            @Override
+            protected void paintComponent(Graphics g) {
+                if (promptImg != null) {
+                    int xPos;
+                    int imgWidth = promptImg.getWidth(null);
+                    int imgHeight = promptImg.getHeight(null);
+                    int widthSpace = getWidth() - 20;
+                    int heightSpace = getHeight() - 50;
+                    if (imgWidth > widthSpace) {
+                        promptImg = promptImg.getScaledInstance(widthSpace, imgHeight, BufferedImage.SCALE_SMOOTH);
+                        double scale = (double) widthSpace / imgWidth;
+                        imgWidth = widthSpace;
+                        imgHeight = (int) (imgHeight * scale);
+                        promptImg = promptImg.getScaledInstance(widthSpace, imgHeight, BufferedImage.SCALE_SMOOTH);
+                    }
+                    if (imgHeight > heightSpace) {
+                        promptImg = promptImg.getScaledInstance(imgWidth, heightSpace, BufferedImage.SCALE_SMOOTH);
+                        double scale = (double) heightSpace / imgHeight;
+                        imgHeight = heightSpace;
+                        imgWidth = (int) (imgWidth * scale);
+                        promptImg = promptImg.getScaledInstance(imgWidth, heightSpace, BufferedImage.SCALE_SMOOTH);
+                    }
+
+                    if (imgWidth >= widthSpace) {
+                        xPos = 10;
+                    }
+                    else {
+                        xPos = (getWidth() - imgWidth) / 2;
+                    }
+                    g.drawImage(promptImg, xPos, 10, imgWidth, imgHeight, null);
+                    g.drawString(prompt, (getWidth() - prompt.length() * 20)/ 2, heightSpace + 50);
+                }
+                else {
+                    g.drawString(prompt, (getWidth() - prompt.length() * 20) / 2, getHeight() / 2);
+                }
+            }
+        };
         promptCard.addActionListener(this);
         promptCard.setFont(new Font("Comic Sans", Font.PLAIN, 40));
         cardPanel.setLayout(new BorderLayout(50, 50));
@@ -80,6 +128,10 @@ public class Flipper extends JPanel implements ActionListener{
         JLabel responseCard = new JLabel(response);
         responseCard.setFont(new Font("Comic Sans", Font.PLAIN, 40));
 
+        JButton seePrompt = new JButton(seePromptAgain);
+        seePrompt.setFont(new Font("Comic Sans", Font.PLAIN, 20));
+        seePrompt.addActionListener(this);
+
         JLabel question = new JLabel("Got it right?");
         question.setFont(new Font("Comic Sans", Font.PLAIN, 20));
 
@@ -99,12 +151,15 @@ public class Flipper extends JPanel implements ActionListener{
         cardPanel.add(responseCard);
         responseCard.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        cardPanel.add(Box.createRigidArea(new Dimension(0, 100)));
+        cardPanel.add(Box.createRigidArea(new Dimension(0, 120)));
+        cardPanel.add(seePrompt);
+        seePrompt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // cardPanel.add(Box.createRigidArea(new Dimension(0, 25)));
         cardPanel.add(question);
         question.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.add(respPanel);
         add(cardPanel);
-        cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.setVisible(true);
     }
 
@@ -129,6 +184,18 @@ public class Flipper extends JPanel implements ActionListener{
         // System.out.println(curFC);
         prompt = curFC.getPrompt();
         response = curFC.getResponse();
+        try {
+            if (curFC.getPromptImg() != "") {
+                promptImg = ImageIO.read(new File(curFC.getPromptImg()));
+            }
+            if (curFC.getRespImg() != "") {
+                respImg = ImageIO.read(new File(curFC.getRespImg()));
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(0);
+        }
         
     }
 
@@ -147,9 +214,9 @@ public class Flipper extends JPanel implements ActionListener{
         if (cmd.equals(prompt)) {
             flip();
         }
-        // else if (cmd.equals(("Retry the ones you didn't get"))) {
-        //     new Study(missedStack);
-        // }
+        else if (cmd.equals(seePromptAgain)) {
+            displayPrompt();
+        }
         else nextCard(cmd.equals("Yes"));
     }
 }

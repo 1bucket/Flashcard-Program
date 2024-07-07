@@ -45,7 +45,7 @@ public class FCStack {
         while (stack.size() != 0) 
             newStack.add(stack.remove(rng.nextInt(stack.size())));
         stack = newStack;
-        System.out.println(newStack.size());
+        // System.out.println(newStack.size());
         // for (Flashcard fc : newStack) {
         //     System.out.println(fc);
         // }
@@ -89,6 +89,6 @@ public class FCStack {
         // deck.getStack().add(new Flashcard("1", "2", "3", "4"));
         // deck.getStack().add(new Flashcard("5", "6", "7", "8"));
         deck.randomize();
-        System.out.println(deck);
+        // System.out.println(deck);
     }
 }
