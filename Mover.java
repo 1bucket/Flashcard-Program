@@ -38,11 +38,13 @@ public class Mover implements ActionListener {
         nextPaths = null;
 
         frame = new JFrame("Move Selected");
-        frame.setPreferredSize(new Dimension(300, 450));
+        frame.setPreferredSize(new Dimension(520, 780));
         masterPanel = frame.getContentPane();
         masterPanel.setLayout(new GridBagLayout());
 
+        // System.out.println("a");
         refresh();
+        // System.out.println("b");
 
         GridBagConstraints constrs = new GridBagConstraints();
         constrs.gridx = 0;
@@ -88,12 +90,19 @@ public class Mover implements ActionListener {
         // System.out.println(mainList.size());
         if (mainList.size() < 1) return mainList;
         Stack<Flashcard> check = new Stack(checkList);
+        int failCounter = 0;
         for (int index = 0; mainList.size() > 0 && check.size() > 0; index += 1) {
             index %= mainList.size();
+            // System.out.print(mainList.size());
+            // System.out.println(", " + check.size());
             if (mainList.get(index).equals(check.peek())) {
                 check.pop();
                 mainList.remove(index);
                 index = 0;
+            }
+            failCounter += 1;
+            if (failCounter == mainList.size()) {
+                check.pop();
             }
         }
         return mainList;
@@ -135,17 +144,20 @@ public class Mover implements ActionListener {
             display.add(sleeveButton, constrs);
             numSleeves++;
         }
+        // System.out.println("boop");
         ArrayList<Flashcard> currentFCs = removeFCDupes(Manage.findFCsUnder(curPath), fcs);
         for (int numFCs = 0; numFCs < currentFCs.size(); numFCs++) {
+            // System.out.println("bing");
             constrs.gridy = numFCs + numSleeves;
-            JButton fcButton = new JButton(currentFCs.get(numFCs).getPrompt());
+            FCButton fcButton = new FCButton(currentFCs.get(numFCs), null, false);
+            fcButton.adaptSize();
             fcButton.setEnabled(false);
             display.add(fcButton, constrs);
         }
 
 
         disp = new JScrollPane(display);
-        disp.setPreferredSize(new Dimension(250, 200));
+        disp.setPreferredSize(new Dimension((int) (masterPanel.getWidth() * 0.8), (int) (masterPanel.getHeight() * 0.8)));
         constrs.gridy = 1;
         masterPanel.add(disp, constrs);
         masterPanel.revalidate();

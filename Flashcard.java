@@ -114,6 +114,7 @@ public class Flashcard {
     }
 
     public boolean equals(Flashcard fc) {
+        // System.out.println(this + ",\n" + fc);
         return sleevePath.equals(fc.getPath()) &&
                prompt.equals(fc.getPrompt()) &&
                response.equals(fc.getResponse()) &&

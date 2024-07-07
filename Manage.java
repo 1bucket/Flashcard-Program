@@ -374,9 +374,9 @@ public class Manage extends Page implements ActionListener{
                 if (cand.equals(fc)) {
                     constrs.gridy++;
                     numOpenFCs++;
-                    JLabel resp = new JLabel(fc.getResponse());
-                    resp.setHorizontalAlignment(JLabel.CENTER);
-                    disp.add(resp, constrs);
+                    // JLabel resp = new JLabel(fc.getResponse());
+                    // resp.setHorizontalAlignment(JLabel.CENTER);
+                    disp.add(getRespComponent(fc), constrs);
                 }
             }
         }
