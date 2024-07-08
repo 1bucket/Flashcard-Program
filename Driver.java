@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 
 public class Driver {
     public static void main(String[] args) {
@@ -18,11 +19,13 @@ public class Driver {
 
     private static void initFrame(JFrame frame) {
         frame.setTitle("Bucket's Flashcards");
-        frame.setMinimumSize(new Dimension(1000, 600));
+        // frame.setMinimumSize(new Dimension(1000, 600));
+        frame.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        // Toolkit.getDefaultToolkit().beep();
         
     }
 }

@@ -875,7 +875,8 @@ public class Manage extends Page implements ActionListener{
         // System.out.println(masterStack.getStack().indexOf(fc));
         // fc.setPrompt(newPrompt);
         // fc.setResponse(newResp);
-        Flashcard modFC = findFC(fc.getPath(), fc.getPrompt(), fc.getResponse());
+        Flashcard modFC = findFC(fc.getPath(), fc.getPrompt(), fc.getResponse(), fc.getPromptImg(), fc.getRespImg());
+        // System.out.println(modFC);
         modFC.setPrompt(newPrompt);
         modFC.setResponse(newResp);
         // System.out.println(masterStack.getStack().indexOf(modFC));
@@ -942,8 +943,8 @@ public class Manage extends Page implements ActionListener{
         saveFCs();
     }
 
-    public Flashcard findFC(String sleevePath, String prompt, String response) {
-        Flashcard temp = new Flashcard(sleevePath, prompt, response);
+    public Flashcard findFC(String sleevePath, String prompt, String response, String promptImg, String respImg) {
+        Flashcard temp = new Flashcard(sleevePath, prompt, response, promptImg, respImg);
         for (Flashcard cand : masterStack.getStack()) {
             if (temp.equals(cand)) {
                 return cand;
