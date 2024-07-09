@@ -925,7 +925,9 @@ public class Manage extends Page implements ActionListener{
             for (Flashcard fc : masterStack.getStack()) {
                 writer.print(fc.getPath() + "\n" +
                              fc.getPrompt() + "\n" + 
-                             fc.getResponse() + "\n");
+                             fc.getResponse() + "\n" +
+                             fc.getPromptImg() + "\n" +
+                             fc.getRespImg() + "\n");
             }
             writer.flush();
             writer.close();
