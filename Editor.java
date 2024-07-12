@@ -14,12 +14,16 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import javax.swing.JFileChooser;
 // import org.apache.commons.lang;
 // import java.awt.Container;
 
 public class Editor implements ActionListener {
     private final int FC = 0;
     private final int SLEEVE = 1;
+
+    private final int PROMPT = 0;
+    private final int RESP = 1;
 
     private Manage root;
 
@@ -35,6 +39,10 @@ public class Editor implements ActionListener {
     private Sleeve sleeve;
     private JTextField sleeveName;
 
+    private String changePromptImgLabel;
+    private String changeRespImgLabel;
+    private int imgCategory;
+
     public Editor(Manage root) {
         this.root = root;
         frame = new JFrame();
@@ -42,6 +50,9 @@ public class Editor implements ActionListener {
         masterPanel.setLayout(new GridBagLayout());
         frame.setContentPane(masterPanel);
         confirm = new JButton("Confirm");
+        changePromptImgLabel = "Change prompt image";
+        changeRespImgLabel = "Change response image";
+        imtCategory = -1;
     }
 
     public Editor(Flashcard fc, Manage root) {
@@ -127,8 +138,14 @@ public class Editor implements ActionListener {
         // Change image 
         constrs.gridx = 0;
         constrs.gridy = 5;
-        JButton changePImg = new JButton("Change prompt image");
-        JButton changeRImg = new JButton("Change response image");
+        JButton changePImg = new JButton(changePromptImgLabel);
+        changePImg.addActionListener(this);
+        masterPanel.add(changePImg, constrs);
+        constrs.gridx = 2;
+        JButton changeRImg = new JButton(changeRespImgLabel);
+        changeRImg.addActionListener(this);
+        masterPanel.add(changeRImg, constrs);
+
 
         constrs.gridx = 1;
         constrs.gridy = 6;
@@ -184,19 +201,56 @@ public class Editor implements ActionListener {
         return input;
     }
 
+    private void newChooser() {
+        JFileChooser imgChooser = new JFileChooser();
+        int returnVal = imgChooser.showOpenDialog(null);
+        if (returnVal = JFileChooser.APPROVE_OPTION) {
+            if (imgCategory == PROMPT) {
+                File img = imgChooser.getSelectedFile();
+                fc.setPromptImage(img.getPath());
+            }
+            else if (imgCategory == RESP) {
+                File img = imgChooser.getSelectedFile();
+                fc.setRespImg(img.getPath());
+            }
+            else {
+                System.out.println("Invalid image category for this flashcard.");
+                System.exit(0);
+            }
+        }
+        // JFrame frame = new JFrame("Choose an image");
+        // frame.add(imgChooser);
+        // frame.pack();
+        // frame.setPositionRelativeTo(null);
+        // frame.setPreferredSize(new Dimension(600, 400));
+        // frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // frame.setVisible(true);
+    }
+
     public void actionPerformed(ActionEvent e) {
-        if (editType == FC) {
+        String cmd = e.getActionCommand();
+        if (cmd.equals(confirm.getText()) && editType == FC) {
             String newPrompt = filterNewLine(prompt.getText());
             String newResp = filterNewLine(resp.getText());
             // System.out.println(newResp);
             root.modFC(fc, newPrompt, newResp);
             // root.modFC(fc, prompt.getText().trim(), resp.getText().trim());
+            frame.dispose();
         }
-        else {
+        else if (cmd.equals(confirm.getText() && editType == SLEEVE)) {
             String newName = filterNewLine(sleeveName.getText());
             root.changeSleeveName(sleeve, newName);
             // root.changeSleeveName(sleeve, sleeveName.getText().trim());
+            frame.dispose();
         }
-        frame.dispose();
+        else if (cmd.equals(changePromptImgLabel)) {
+            imgCategory = PROMPT;
+            newChooser();
+        }
+        else if (cmd.equals(changeRespImgLabel)) {
+            imgCategory = RESP;
+            newChooser();
+        }
+        
     }
 }
