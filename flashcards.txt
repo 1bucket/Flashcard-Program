@@ -1,8 +1,8 @@
 
 la biblioteca
 library
-images/cool car.png
-images/cool car.png
+images/0000.png
+images/0001.png
 not merge test/
 árbol
 tree

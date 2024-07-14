@@ -15,6 +15,9 @@ import java.io.File;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 // import org.apache.commons.lang;
 // import java.awt.Container;
 
@@ -35,6 +38,10 @@ public class Editor implements ActionListener {
     private Flashcard fc;
     private JTextArea prompt;
     private JTextArea resp;
+    private String newPrompt;
+    private String newResp;
+    private String newPromptImg;
+    private String newRespImg;
 
     private Sleeve sleeve;
     private JTextField sleeveName;
@@ -46,113 +53,25 @@ public class Editor implements ActionListener {
     public Editor(Manage root) {
         this.root = root;
         frame = new JFrame();
-        masterPanel = new JPanel();
-        masterPanel.setLayout(new GridBagLayout());
+        resetMasterPanel();
         frame.setContentPane(masterPanel);
         confirm = new JButton("Confirm");
         changePromptImgLabel = "Change prompt image";
         changeRespImgLabel = "Change response image";
-        imtCategory = -1;
+        imgCategory = -1;
     }
 
     public Editor(Flashcard fc, Manage root) {
         this(root);
-        frame.setMinimumSize(new Dimension(800, 600));
         editType = FC;
         this.fc = fc;
 
-        // Flashcard text fields
-        GridBagConstraints constrs = new GridBagConstraints();
-        constrs.gridx = 0;
-        constrs.gridy = 0;
-        JLabel promptLabel = new JLabel("Prompt:");
-        masterPanel.add(promptLabel, constrs);
-        constrs.gridy = 1;
-        Dimension fieldSize = new Dimension(325, 200);
-        prompt = new JTextArea(fc.getPrompt());
-        prompt.setPreferredSize(fieldSize);
-        masterPanel.add(prompt, constrs);
-        // constrs.gridx = 0;
-        // constrs.gridy = 0;
-        // constrs.fill = GridBagConstraints.HORIZONTAL;
-        // constrs.gridwidth = 3;
-        // JLabel location = new JLabel("Location of new Flashcard: " + getPath());
-        // location.setHorizontalAlignment(JLabel.CENTER);
-        // masterPanel.add(location, constrs);
-        // constrs.gridwidth = 1;
-        constrs.gridx = 2;
-        constrs.gridy = 0;
-        JLabel respLabel = new JLabel("Response:");
-        masterPanel.add(respLabel, constrs);
-        constrs.gridy = 1;
-        resp = new JTextArea(fc.getResponse());
-        resp.setPreferredSize(fieldSize);
-        masterPanel.add(resp, constrs);
+        newPrompt = fc.getPrompt();
+        newResp = fc.getResponse();
+        newPromptImg = fc.getPromptImg();
+        newRespImg = fc.getRespImg();
 
-        // Flashcard image fields
-        constrs.gridy = 2;
-        constrs.gridx = 0;
-        masterPanel.add(new JLabel("Prompt Image:"), constrs);
-        constrs.gridy = 3;
-        JPanel promptImgPanel = new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (fc.getPromptImg() != null && fc.getPromptImg() != "") {
-                    try {
-                        g.drawImage(ImageIO.read(new File(fc.getPromptImg())), 0, 0, getWidth(), getHeight(), null);
-                    }
-                    catch (Exception ex) {
-                        ex.printStackTrace();
-                        System.exit(0);
-                    }
-                }
-            }
-        };
-        promptImgPanel.setMinimumSize(fieldSize);
-        promptImgPanel.setPreferredSize(fieldSize);
-        masterPanel.add(promptImgPanel, constrs);
-        constrs.gridx = 2;
-        constrs.gridy = 2;
-        masterPanel.add(new JLabel("Response Image:"), constrs);
-        constrs.gridy = 3;
-        JPanel respImgPanel = new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (fc.getRespImg() != null && fc.getRespImg() != "") {
-                    try {
-                        g.drawImage(ImageIO.read(new File(fc.getRespImg())), 0, 0, getWidth(), getHeight(), null);
-                    }
-                    catch (Exception ex) {
-                        ex.printStackTrace();
-                        System.exit(0);
-                    }
-                }
-            }
-        };
-        respImgPanel.setMinimumSize(fieldSize);
-        respImgPanel.setPreferredSize(fieldSize);
-        masterPanel.add(respImgPanel, constrs);
-
-        // Change image 
-        constrs.gridx = 0;
-        constrs.gridy = 5;
-        JButton changePImg = new JButton(changePromptImgLabel);
-        changePImg.addActionListener(this);
-        masterPanel.add(changePImg, constrs);
-        constrs.gridx = 2;
-        JButton changeRImg = new JButton(changeRespImgLabel);
-        changeRImg.addActionListener(this);
-        masterPanel.add(changeRImg, constrs);
-
-
-        constrs.gridx = 1;
-        constrs.gridy = 6;
-        JButton confirm = new JButton("Confirm");
-        confirm.addActionListener(this);
-        masterPanel.add(confirm, constrs);
-
+        refreshFCEditor();
         finishSetup();
     }
 
@@ -182,6 +101,114 @@ public class Editor implements ActionListener {
         finishSetup();
     }
 
+    private void resetMasterPanel() {
+        masterPanel = new JPanel();
+        masterPanel.setLayout(new GridBagLayout());
+    }
+
+    private void refreshFCEditor() {
+
+        frame.setMinimumSize(new Dimension(800, 600));
+
+        masterPanel.setVisible(false);
+        masterPanel = new JPanel();
+        masterPanel.setLayout(new GridBagLayout());
+
+        // Flashcard text fields
+
+        GridBagConstraints constrs = new GridBagConstraints();
+        constrs.gridx = 0;
+        constrs.gridy = 0;
+        JLabel promptLabel = new JLabel("Prompt:");
+        masterPanel.add(promptLabel, constrs);
+        constrs.gridy = 1;
+        Dimension fieldSize = new Dimension(325, 200);
+        prompt = new JTextArea(newPrompt);
+        prompt.setPreferredSize(fieldSize);
+        masterPanel.add(prompt, constrs);
+        // constrs.gridx = 0;
+        // constrs.gridy = 0;
+        // constrs.fill = GridBagConstraints.HORIZONTAL;
+        // constrs.gridwidth = 3;
+        // JLabel location = new JLabel("Location of new Flashcard: " + getPath());
+        // location.setHorizontalAlignment(JLabel.CENTER);
+        // masterPanel.add(location, constrs);
+        // constrs.gridwidth = 1;
+        constrs.gridx = 2;
+        constrs.gridy = 0;
+        JLabel respLabel = new JLabel("Response:");
+        masterPanel.add(respLabel, constrs);
+        constrs.gridy = 1;
+        resp = new JTextArea(newResp);
+        resp.setPreferredSize(fieldSize);
+        masterPanel.add(resp, constrs);
+
+        // Flashcard image fields
+        constrs.gridy = 2;
+        constrs.gridx = 0;
+        masterPanel.add(new JLabel("Prompt Image:"), constrs);
+        constrs.gridy = 3;
+        JPanel promptImgPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (newPromptImg != null && newPromptImg != "") {
+                    try {
+                        g.drawImage(ImageIO.read(new File(newPromptImg)), 0, 0, getWidth(), getHeight(), null);
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                        System.exit(0);
+                    }
+                }
+            }
+        };
+        promptImgPanel.setMinimumSize(fieldSize);
+        promptImgPanel.setPreferredSize(fieldSize);
+        masterPanel.add(promptImgPanel, constrs);
+        constrs.gridx = 2;
+        constrs.gridy = 2;
+        masterPanel.add(new JLabel("Response Image:"), constrs);
+        constrs.gridy = 3;
+        JPanel respImgPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (newRespImg != null && newRespImg != "") {
+                    try {
+                        g.drawImage(ImageIO.read(new File(newRespImg)), 0, 0, getWidth(), getHeight(), null);
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                        System.exit(0);
+                    }
+                }
+            }
+        };
+        respImgPanel.setMinimumSize(fieldSize);
+        respImgPanel.setPreferredSize(fieldSize);
+        masterPanel.add(respImgPanel, constrs);
+
+        // Change image 
+        constrs.gridx = 0;
+        constrs.gridy = 5;
+        JButton changePImg = new JButton(changePromptImgLabel);
+        changePImg.addActionListener(this);
+        masterPanel.add(changePImg, constrs);
+        constrs.gridx = 2;
+        JButton changeRImg = new JButton(changeRespImgLabel);
+        changeRImg.addActionListener(this);
+        masterPanel.add(changeRImg, constrs);
+
+
+        constrs.gridx = 1;
+        constrs.gridy = 6;
+        JButton confirm = new JButton("Confirm");
+        confirm.addActionListener(this);
+        masterPanel.add(confirm, constrs);
+        frame.setContentPane(masterPanel);
+    }
+
     private void finishSetup() {
         // frame.revalidate();
         // frame.repaint();
@@ -203,21 +230,24 @@ public class Editor implements ActionListener {
 
     private void newChooser() {
         JFileChooser imgChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNGs, JPGs, and JPEGS", "png", "jpg", "jpeg");
+        imgChooser.setFileFilter(filter);
         int returnVal = imgChooser.showOpenDialog(null);
-        if (returnVal = JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             if (imgCategory == PROMPT) {
                 File img = imgChooser.getSelectedFile();
-                fc.setPromptImage(img.getPath());
+                newPromptImg = img.getPath();
             }
             else if (imgCategory == RESP) {
                 File img = imgChooser.getSelectedFile();
-                fc.setRespImg(img.getPath());
+                newRespImg = img.getPath();
             }
             else {
                 System.out.println("Invalid image category for this flashcard.");
                 System.exit(0);
             }
         }
+        refreshFCEditor();
         // JFrame frame = new JFrame("Choose an image");
         // frame.add(imgChooser);
         // frame.pack();
@@ -233,11 +263,11 @@ public class Editor implements ActionListener {
             String newPrompt = filterNewLine(prompt.getText());
             String newResp = filterNewLine(resp.getText());
             // System.out.println(newResp);
-            root.modFC(fc, newPrompt, newResp);
+            root.modFC(fc, newPrompt, newResp, newPromptImg, newRespImg);
             // root.modFC(fc, prompt.getText().trim(), resp.getText().trim());
             frame.dispose();
         }
-        else if (cmd.equals(confirm.getText() && editType == SLEEVE)) {
+        else if (cmd.equals(confirm.getText()) && editType == SLEEVE) {
             String newName = filterNewLine(sleeveName.getText());
             root.changeSleeveName(sleeve, newName);
             // root.changeSleeveName(sleeve, sleeveName.getText().trim());

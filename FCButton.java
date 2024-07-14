@@ -89,7 +89,7 @@ public class FCButton extends JButton implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         // System.out.println("beep");
-        System.out.println(getWidth() + ", " + getHeight());
+        // System.out.println(getWidth() + ", " + getHeight());
         if (isStudyCard) {
             if (root.getOpenStudyCards().indexOf(fc) != -1) {
                 root.closeStudyCard(fc);

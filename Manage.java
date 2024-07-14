@@ -27,6 +27,10 @@ import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class Manage extends Page implements ActionListener{
     // Deletion modes
@@ -870,7 +874,7 @@ public class Manage extends Page implements ActionListener{
         }
     }
 
-    public void modFC(Flashcard fc, String newPrompt, String newResp) {
+    public void modFC(Flashcard fc, String newPrompt, String newResp, String newPromptImg, String newRespImg) {
         // System.out.println("huh");
         // System.out.println(masterStack.getStack().indexOf(fc));
         // fc.setPrompt(newPrompt);
@@ -879,6 +883,65 @@ public class Manage extends Page implements ActionListener{
         // System.out.println(modFC);
         modFC.setPrompt(newPrompt);
         modFC.setResponse(newResp);
+        try {
+            int numImgs = new File("images/").listFiles().length - 1;
+            // System.out.println(numImgs);
+            if (newPromptImg != modFC.getPromptImg()) {
+                Path path = Paths.get(newPromptImg);
+                Path destDir = Paths.get("images/");
+                // File srcImg = new File(path.getParent().toString(), path.getFileName().toString());
+                // File destDir = new File("images/");
+                // FileUtils.copyFileToDirectory(srcImg, destDir);
+                // System.out.println(destDir.resolve(path.getFileName()));
+                String fileName;
+                if (fc.getPromptImg() != null && fc.getPromptImg() != "") {
+                    fileName = fc.getPromptImg();
+                    Files.copy(path, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+                    modFC.setPromptImg(fileName);
+                }
+                else {
+                    fileName = "" + numImgs;
+                    while (fileName.length() < 4) {
+                        fileName = "0" + fileName;
+                    }
+                    String imgName = path.getFileName().toString();
+                    String ext = imgName.substring(imgName.lastIndexOf("."));
+                    fileName += ext;
+                    Files.copy(path, destDir.resolve(fileName));
+                    modFC.setPromptImg(destDir.resolve(fileName).toString());
+                }
+                // System.exit(0);
+                numImgs += 1;
+            }
+            if (newRespImg != modFC.getRespImg()) {
+                Path path = Paths.get(newRespImg);
+                Path destDir = Paths.get("images/");
+                String fileName;
+                if (fc.getPromptImg() != null && fc.getPromptImg() != "") {
+                    fileName = fc.getRespImg();
+                    Files.copy(path, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+                    modFC.setRespImg(fileName);
+                }
+                else {
+                    fileName = "" + numImgs;
+                    while (fileName.length() < 4) {
+                        fileName = "0" + fileName;
+                    }
+                    String imgName = path.getFileName().toString();
+                    String ext = imgName.substring(imgName.lastIndexOf("."));
+                    fileName += ext;
+                    Files.copy(path, destDir.resolve(fileName));
+                    modFC.setRespImg(destDir.resolve(fileName).toString());
+                }
+                numImgs += 1;
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(0);
+        }
+        // modFC.setPromptImg(newPromptImg);
+        // modFC.setRespImg(newRespImg);
         // System.out.println(masterStack.getStack().indexOf(modFC));
         saveFCs();
         refresh();
