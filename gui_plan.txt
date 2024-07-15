@@ -1,0 +1,23 @@
+planned features
+- smoother gui design
+    - custom designs for
+        - buttons (see below)
+        - panels (background)
+        - scroll bar (will need for Manage and ImageChooser)
+    - (not too distracting) patterns to fill the background screen
+    - custom button behavior
+        - click sound
+        - cursor hovering
+        - disabled button
+    - 
+    
+- animations for components?
+- files to store gui information
+    - prebuilt color palettes -> primary, secondary colors, etc.
+    - scale info for component sizes
+- config functionality to change colors/color palettes/scale
+- more efficient image loading
+
+Color palette:
+- 3 main colors (used for frame primary background color and components) that are consciously chosen
+- other colors that are generated via main colors (to spice up background)
