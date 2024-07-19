@@ -12,13 +12,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.GraphicsEnvironment;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.Box;
 
 public class GUI {
+    public static final int SMALL_BUTTON = 0;
+    public static final int MEDIUM_BUTTON = 1;
+
     private static Color primary;
     private static Color secondary;
     private static Color tertiary;
 
-    private static int textBuffer;
+    private static Insets smallButtonInsets;
+    private static Insets mediumButtonInsets;
+    private static int maxLineWidthSmall;
+    private static int maxLineWidthMed;
     private static Font font;
     private static Color textColor;
 
@@ -30,7 +42,10 @@ public class GUI {
         secondary = Color.BLUE;
         tertiary = Color.GREEN;
 
-        textBuffer = 50;
+        smallButtonInsets = new Insets(5, 10, 5, 10);
+        mediumButtonInsets = new Insets(10, 25, 10, 25);
+        maxLineWidthSmall = 60;
+        maxLineWidthMed = 100;
         // for (Font font : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
         //     System.out.println(font);
         // }
@@ -42,40 +57,103 @@ public class GUI {
         buttonBorderThickness = 10;
     }
 
-    public static JButton getButton(String text) {
+    public static JButton getButton(String text, int size) {
         return new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
-                int width = getWidth();
-                int height = getHeight();
+                // int width = getWidth();
+                // int height = getHeight();
+                // drawButton(this, size);
+                FontMetrics fontDetails = getFontMetrics(font);
+                String text = getText();
+                ArrayList<String> lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
+                Insets insets = size == SMALL_BUTTON ? smallButtonInsets : mediumButtonInsets;
+                int maxTextWidth = size == SMALL_BUTTON ? maxLineWidthSmall : maxLineWidthMed;
+                int buttonWidth = maxTextWidth + insets.left + insets.right;
+                // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
+
+
+                int textWidth = fontDetails.stringWidth(text);
+                HashMap<String, Integer> linePositions = new HashMap<String, Integer>();
+                while (text.length() > 0) {
+                    if (textWidth > maxTextWidth) {
+                        String line = "";
+                        for (int index = 0; index < text.length(); index += 1) {
+                            line = text.substring(0, index);
+                            int width = fontDetails.stringWidth(line);
+                            if (width > maxTextWidth) {
+                                int xPos = (buttonWidth - width) / 2;
+                                linePositions.put(line, xPos);
+                                // System.out.println(xPos);
+                                lines.add(line);
+                                text = text.substring(index);
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        int xPos = (buttonWidth - textWidth) / 2;
+                        linePositions.put(text, xPos);
+                        lines.add(text);
+                        break;
+                    }
+                    textWidth = fontDetails.stringWidth(text);
+                }
+                int lineHeight = fontDetails.getHeight();
+                int numLines = lines.size();
+                int buttonHeight = lineHeight * numLines + insets.top + insets.bottom;
+                // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
+                setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+                setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+
+                System.out.println(buttonWidth + ", " + buttonHeight);
+                // Graphics g = getGraphics();
                 g.setColor(secondary);
-                g.fillRoundRect(0, 0, width, height, buttonArcRadius, buttonArcRadius);
+                g.fillRoundRect(0, 0, buttonWidth, buttonHeight, buttonArcRadius, buttonArcRadius);
                 g.setColor(primary);
                 g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
-                                width - 2 * buttonBorderThickness, height - 2 * buttonBorderThickness, 
+                                buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
                                 buttonArcRadius, buttonArcRadius);
-                drawText(this, getText());
+
+                // comp.setPreferredSize(new Dimension(100, 100));
+                for (int index = 0; index < lines.size(); index += 1) {
+                    String line = lines.get(index);
+                    System.out.print("Line " + index + ": " + line);
+                    int xPos = linePositions.get(line);
+                    int yPos = insets.top + (index + 1) * lineHeight;
+                    System.out.println(" : " + "Pos " + xPos + " " + yPos);
+                    g.setFont(font);
+                    g.setColor(textColor);
+                    g.drawString(line, xPos, yPos);
+                }
                 
             }
         };
     }
 
     // Assumes centered orientation
-    private static void drawText(JComponent comp, String text) {
-        FontMetrics fontDetails = comp.getFontMetrics(font);
+    private static void drawButton(JButton button, int size) {
+        FontMetrics fontDetails = button.getFontMetrics(font);
+        String text = button.getText();
         ArrayList<String> lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-        int maxTextWidth = comp.getWidth() - 2 * textBuffer;
+        Insets insets = size == SMALL_BUTTON ? smallButtonInsets : mediumButtonInsets;
+        int maxTextWidth = size == SMALL_BUTTON ? maxLineWidthSmall : maxLineWidthMed;
+        int buttonWidth = maxTextWidth + insets.left + insets.right;
+        // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
+
+
         int textWidth = fontDetails.stringWidth(text);
         HashMap<String, Integer> linePositions = new HashMap<String, Integer>();
-        while (textWidth > 0) {
+        while (text.length() > 0) {
             if (textWidth > maxTextWidth) {
                 String line = "";
                 for (int index = 0; index < text.length(); index += 1) {
                     line = text.substring(0, index);
                     int width = fontDetails.stringWidth(line);
                     if (width > maxTextWidth) {
-                        int xPos = (comp.getWidth() - width) / 2;
+                        int xPos = (buttonWidth - width) / 2;
                         linePositions.put(line, xPos);
+                        // System.out.println(xPos);
                         lines.add(line);
                         text = text.substring(index);
                         break;
@@ -83,20 +161,36 @@ public class GUI {
                 }
             }
             else {
-                int xPos = (comp.getWidth() - textWidth) / 2;
+                int xPos = (buttonWidth - textWidth) / 2;
                 linePositions.put(text, xPos);
                 lines.add(text);
                 break;
             }
             textWidth = fontDetails.stringWidth(text);
         }
-        int lineHeight = comp.getHeight();
+        int lineHeight = fontDetails.getHeight();
         int numLines = lines.size();
+        int buttonHeight = lineHeight * numLines + insets.top + insets.bottom;
+        button.setMinimumSize(new Dimension(buttonWidth - (insets.left + insets.right) / 2, buttonHeight - (insets.top + insets.bottom) / 2));
+        button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+
+        System.out.println(buttonWidth + ", " + buttonHeight);
+        Graphics g = button.getGraphics();
+        g.setColor(secondary);
+        g.fillRoundRect(0, 0, buttonWidth, buttonHeight, buttonArcRadius, buttonArcRadius);
+        g.setColor(primary);
+        g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
+                        buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
+                        buttonArcRadius, buttonArcRadius);
+
+        // comp.setPreferredSize(new Dimension(100, 100));
         for (int index = 0; index < lines.size(); index += 1) {
             String line = lines.get(index);
+            System.out.print("Line " + index + ": " + line);
             int xPos = linePositions.get(line);
-            int yPos = textBuffer + (index + 1) * lineHeight;
-            Graphics g = comp.getGraphics();
+            int yPos = insets.top + (index + 1) * lineHeight;
+            System.out.println(" : " + "Pos " + xPos + " " + yPos);
             g.setFont(font);
             g.setColor(textColor);
             g.drawString(line, xPos, yPos);
@@ -120,10 +214,26 @@ public class GUI {
 
         JFrame frame = new JFrame("test");
         JPanel testPanel = new JPanel();
-        testPanel.setLayout(null);
-        JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        // testPanel.setLayout(null);
+        testPanel.setLayout(new GridBagLayout());
+        GridBagConstraints constrs = new GridBagConstraints();
+        constrs.gridx = 0;
+        constrs.gridy = 0;
+        // constrs.fill = GridBagConstraints.HORIZONTAL;
+        // constrs.weightx = 1;
+        // constrs.weighty = 1;
+        // constrs.gr
+        JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", SMALL_BUTTON);
+        // testButton = new JButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         // testButton.setMinimumSize(new Dimension(100, 75));
-        testPanel.add(testButton);
+        testButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("hello");
+                System.exit(0);
+            }
+        });
+        testPanel.add(testButton, constrs);
+        System.out.println("bangah " + testButton.getWidth() + " " + testButton.getHeight());
         frame.setContentPane(testPanel);
         frame.setPreferredSize(new Dimension(800, 600));
         frame.pack();
