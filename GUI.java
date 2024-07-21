@@ -337,7 +337,8 @@ public class GUI {
         testButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // System.out.println(testButton.getHeight());
-                System.exit(0);
+                // System.exit(0);
+                System.out.println("activated");
             }
         });
         testPanel.add(testButton);
