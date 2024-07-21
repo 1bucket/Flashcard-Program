@@ -39,14 +39,15 @@ public class GUI {
 
     private static int buttonArcRadius;
     private static int buttonBorderThickness;
+    private static int textBuffer;
 
     public static void init() {
         primary = Color.RED;
         secondary = Color.BLUE;
         tertiary = Color.GREEN;
 
-        smallButtonInsets = new Insets(5, 10, 5, 10);
-        mediumButtonInsets = new Insets(10, 25, 10, 25);
+        smallButtonInsets = new Insets(5 + textBuffer, 10, 5 + textBuffer, 10);
+        mediumButtonInsets = new Insets(10 + textBuffer, 25, 10 + textBuffer, 25);
         maxLineWidthSmall = 100;
         maxLineWidthMed = 150;
         // for (Font font : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
@@ -59,7 +60,8 @@ public class GUI {
         mediumFontSize = 40;
 
         buttonArcRadius = 15;
-        buttonBorderThickness = 5;
+        buttonBorderThickness = 10;
+        textBuffer = 5;
     }
 
     public static Color primary() {
@@ -112,6 +114,10 @@ public class GUI {
 
     public static int buttonBorderThickness() {
         return buttonBorderThickness;
+    }
+
+    public static int textBuffer() {
+        return textBuffer;
     }
     /*
     private static void resize(JButton button, int size) {
@@ -341,6 +347,7 @@ public class GUI {
                 System.out.println("activated");
             }
         });
+        testButton.setBorderPainted(true);
         testPanel.add(testButton);
         int xPos = ((int) dim.getWidth() - testButton.getButtonWidth()) / 2;
         // System.out.println(testButton.getWidth());
