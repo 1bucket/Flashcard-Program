@@ -34,6 +34,8 @@ public class GUI {
     private static int maxLineWidthMed;
     private static Font font;
     private static Color textColor;
+    private static int smallFontSize;
+    private static int mediumFontSize;
 
     private static int buttonArcRadius;
     private static int buttonBorderThickness;
@@ -45,17 +47,19 @@ public class GUI {
 
         smallButtonInsets = new Insets(5, 10, 5, 10);
         mediumButtonInsets = new Insets(10, 25, 10, 25);
-        maxLineWidthSmall = 60;
-        maxLineWidthMed = 100;
+        maxLineWidthSmall = 100;
+        maxLineWidthMed = 150;
         // for (Font font : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
         //     System.out.println(font);
         // }
         // font = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()[0];
-        font = new Font("Serif", Font.PLAIN, 20);
+        font = new Font("Serif", Font.PLAIN, 40);
         textColor = Color.BLACK;
+        smallFontSize = 20;
+        mediumFontSize = 40;
 
         buttonArcRadius = 15;
-        buttonBorderThickness = 10;
+        buttonBorderThickness = 5;
     }
 
     public static Color primary() {
@@ -88,6 +92,14 @@ public class GUI {
 
     public static Font font() {
         return font;
+    }
+
+    public static int smallFontSize() {
+        return smallFontSize;
+    }
+    
+    public static int mediumFontSize() {
+        return mediumFontSize;
     }
 
     public static Color textColor() {
