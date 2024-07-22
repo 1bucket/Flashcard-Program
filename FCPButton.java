@@ -34,6 +34,8 @@ public class FCPButton extends JButton implements MouseListener{
     private int lineHeight;
 
     private int buttonWidth, buttonHeight;
+    private int buttonBorderThickness;
+    private int inset;
     private Font font;
 
     private ButtonState state;
@@ -45,6 +47,7 @@ public class FCPButton extends JButton implements MouseListener{
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
         font = GUI.font().deriveFont((float) (size == SMALL_BUTTON ? GUI.smallFontSize() : GUI.mediumFontSize()));
+        inset = size == SMALL_BUTTON ? GUI.smallButtonInset() : GUI.mediumButtonInset();
         // System.out.println(font.getSize());
         resize();
         state = ButtonState.NONE;
@@ -63,10 +66,11 @@ public class FCPButton extends JButton implements MouseListener{
         FontMetrics fontDetails = getFontMetrics(font);
         // String text = getText();
         // lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-        Insets insets = size == SMALL_BUTTON ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
+        // Insets insets = size == SMALL_BUTTON ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
         int maxTextWidth = size == SMALL_BUTTON ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
         // maxTextWidth -= 2 * GUI.textBuffer() + 4;
-        buttonWidth = maxTextWidth + insets.left + insets.right;
+        buttonWidth = maxTextWidth + 2 * (inset + GUI.textBuffer());
+        buttonBorderThickness = inset / 2;
         // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
 
         String text = textLabel;
@@ -81,11 +85,11 @@ public class FCPButton extends JButton implements MouseListener{
                     line = text.substring(0, index);
                     // System.out.println(line);
                     int width = fontDetails.stringWidth(line);
-                    System.out.println(width);
+                    // System.out.println(width);
                     // System.out.println(maxTextWidth);
                     if (width >= maxTextWidth) {
-                        System.out.println("boop");
-                        int xPos = (buttonWidth - width) / 2 + 2 + GUI.textBuffer();
+                        // System.out.println("boop");
+                        int xPos = (buttonWidth - width) / 2;
                         linePositions.put(line, xPos);
                         lines.add(line);
                         text = text.substring(index);
@@ -95,7 +99,7 @@ public class FCPButton extends JButton implements MouseListener{
                 }
             }
             else {
-                int xPos = (buttonWidth - textWidth) / 2 + 2 + GUI.textBuffer();
+                int xPos = (buttonWidth - textWidth) / 2;
                 linePositions.put(text, xPos);
                 lines.add(text);
                 break;
@@ -103,8 +107,7 @@ public class FCPButton extends JButton implements MouseListener{
             textWidth = fontDetails.stringWidth(text);
         }
         lineHeight = fontDetails.getHeight();
-        int numLines = lines.size();
-        buttonHeight = lineHeight * numLines + insets.top + insets.bottom + 2 + GUI.textBuffer();
+        buttonHeight = lineHeight * lines.size() + 2 * inset + GUI.textBuffer();
         // System.out.println(numLines);
         // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
         setPreferredSize(new Dimension(buttonWidth, buttonHeight));
@@ -113,9 +116,9 @@ public class FCPButton extends JButton implements MouseListener{
 
     @Override
     protected void paintComponent(Graphics g) {
-        System.out.println("painting " + state);
-        int buttonWidth = getWidth();
-        int buttonHeight = getHeight();
+        // System.out.println("painting " + state);
+        // int buttonWidth = getWidth();
+        // int buttonHeight = getHeight();
         Color primary = GUI.primary();
         Color secondary = GUI.secondary();
         Color buttonPrimary = primary;
@@ -151,18 +154,19 @@ public class FCPButton extends JButton implements MouseListener{
 
         }
         // System.out.println(buttonPrimary + ", " + buttonSecondary);
-        Insets insets = getInsets();
         g.setColor(buttonSecondary);
         if (state != ButtonState.PRESSED) {
-            g.fillRoundRect(2, 2, buttonWidth - 4, buttonHeight - 4, GUI.buttonArcRadius(), GUI.buttonArcRadius());
+            g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
+                            buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
+                            GUI.buttonArcRadius(), GUI.buttonArcRadius());
         }
         else {
             g.fillRoundRect(0, 0, buttonWidth, buttonHeight, GUI.buttonArcRadius(), GUI.buttonArcRadius());
         }
 
         g.setColor(buttonPrimary);
-        g.fillRoundRect(GUI.buttonBorderThickness(), GUI.buttonBorderThickness(), 
-                        buttonWidth - 2 * GUI.buttonBorderThickness(), buttonHeight - 2 * GUI.buttonBorderThickness(), 
+        g.fillRoundRect(2 * buttonBorderThickness, 2 * buttonBorderThickness, 
+                        buttonWidth - 2 * inset, buttonHeight - 2 * inset, 
                         GUI.buttonArcRadius(), GUI.buttonArcRadius());
 
         // comp.setPreferredSize(new Dimension(100, 100));
@@ -172,10 +176,12 @@ public class FCPButton extends JButton implements MouseListener{
             String line = lines.get(index);
             // System.out.print("Line " + index + ": " + line);
             int xPos = linePositions.get(line);
-            int yPos = insets.top + (index + 1) * lineHeight;
+            int yPos = inset + (index + 1) * lineHeight;
             // System.out.println(" : " + "Pos " + xPos + " " + yPos);
             
             g.drawString(line, xPos, yPos);
+            // g.setColor(Color.BLACK);
+            // g.drawLine(xPos, yPos - lineHeight, xPos + 15, yPos - lineHeight);
         }
     }
 
@@ -187,18 +193,29 @@ public class FCPButton extends JButton implements MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        state = ButtonState.ENTERED;
-        System.out.println("entered");
-        revalidate();
-        repaint();
+        if (state == ButtonState.PRESSED) {
+            return;
+        }
+        else {
+            state = ButtonState.ENTERED;
+            System.out.println("entered");
+            revalidate();
+            repaint();
+        }
+        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        state = ButtonState.NONE;
-        System.out.println("exited");
-        revalidate();
-        repaint();
+        if (state == ButtonState.PRESSED) {
+            return;
+        }
+        else {
+            state = ButtonState.NONE;
+            System.out.println("exited");
+            revalidate();
+            repaint();
+        }
     }
 
     @Override

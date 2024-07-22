@@ -28,8 +28,8 @@ public class GUI {
     private static Color secondary;
     private static Color tertiary;
 
-    private static Insets smallButtonInsets;
-    private static Insets mediumButtonInsets;
+    private static int smallButtonInset;
+    private static int mediumButtonInset;
     private static int maxLineWidthSmall;
     private static int maxLineWidthMed;
     private static Font font;
@@ -38,7 +38,7 @@ public class GUI {
     private static int mediumFontSize;
 
     private static int buttonArcRadius;
-    private static int buttonBorderThickness;
+    // private static int buttonBorderThickness;
     private static int textBuffer;
 
     public static void init() {
@@ -46,8 +46,8 @@ public class GUI {
         secondary = Color.BLUE;
         tertiary = Color.GREEN;
 
-        smallButtonInsets = new Insets(5 + textBuffer, 10, 5 + textBuffer, 10);
-        mediumButtonInsets = new Insets(10 + textBuffer, 25, 10 + textBuffer, 25);
+        mediumButtonInset = 12;
+        smallButtonInset = 10;
         maxLineWidthSmall = 100;
         maxLineWidthMed = 150;
         // for (Font font : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
@@ -60,8 +60,8 @@ public class GUI {
         mediumFontSize = 40;
 
         buttonArcRadius = 15;
-        buttonBorderThickness = 10;
-        textBuffer = 5;
+        // buttonBorderThickness = 10;
+        textBuffer = 7;
     }
 
     public static Color primary() {
@@ -76,12 +76,12 @@ public class GUI {
         return tertiary;
     }
 
-    public static Insets smallButtonInsets() {
-        return smallButtonInsets;
+    public static int smallButtonInset() {
+        return smallButtonInset;
     }
 
-    public static Insets mediumButtonInsets() {
-        return mediumButtonInsets;
+    public static int mediumButtonInset() {
+        return mediumButtonInset;
     }
 
     public static int maxLineWidthSmall() {
@@ -111,212 +111,15 @@ public class GUI {
     public static int buttonArcRadius() {
         return buttonArcRadius;
     }
-
+    /*
     public static int buttonBorderThickness() {
         return buttonBorderThickness;
     }
+    */
 
     public static int textBuffer() {
         return textBuffer;
     }
-    /*
-    private static void resize(JButton button, int size) {
-        FontMetrics fontDetails = button.getFontMetrics(font);
-                String text = button.getText();
-                ArrayList<String> lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-                Insets insets = size == SMALL_BUTTON ? smallButtonInsets : mediumButtonInsets;
-                int maxTextWidth = size == SMALL_BUTTON ? maxLineWidthSmall : maxLineWidthMed;
-                int buttonWidth = maxTextWidth + insets.left + insets.right;
-                // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
-
-
-                int textWidth = fontDetails.stringWidth(text);
-                HashMap<String, Integer> linePositions = new HashMap<String, Integer>();
-                while (text.length() > 0) {
-                    if (textWidth > maxTextWidth) {
-                        String line = "";
-                        for (int index = 0; index < text.length(); index += 1) {
-                            line = text.substring(0, index);
-                            int width = fontDetails.stringWidth(line);
-                            if (width > maxTextWidth) {
-                                int xPos = (buttonWidth - width) / 2;
-                                linePositions.put(line, xPos);
-                                // System.out.println(xPos);
-                                lines.add(line);
-                                text = text.substring(index);
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        int xPos = (buttonWidth - textWidth) / 2;
-                        linePositions.put(text, xPos);
-                        lines.add(text);
-                        break;
-                    }
-                    textWidth = fontDetails.stringWidth(text);
-                }
-                int lineHeight = fontDetails.getHeight();
-                int numLines = lines.size();
-                int buttonHeight = lineHeight * numLines + insets.top + insets.bottom;
-                // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
-                button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-                button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
-    }
-
-    public static JButton getButton(String text, int size) {
-        JButton button = new JButton(text) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                // int width = getWidth();
-                // int height = getHeight();
-                // drawButton(this, size);
-                FontMetrics fontDetails = getFontMetrics(font);
-                String text = getText();
-                ArrayList<String> lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-                Insets insets = size == SMALL_BUTTON ? smallButtonInsets : mediumButtonInsets;
-                int maxTextWidth = size == SMALL_BUTTON ? maxLineWidthSmall : maxLineWidthMed;
-                int buttonWidth = maxTextWidth + insets.left + insets.right;
-                // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
-
-
-                int textWidth = fontDetails.stringWidth(text);
-                HashMap<String, Integer> linePositions = new HashMap<String, Integer>();
-                while (text.length() > 0) {
-                    if (textWidth > maxTextWidth) {
-                        String line = "";
-                        for (int index = 0; index < text.length(); index += 1) {
-                            line = text.substring(0, index);
-                            int width = fontDetails.stringWidth(line);
-                            if (width > maxTextWidth) {
-                                int xPos = (buttonWidth - width) / 2;
-                                linePositions.put(line, xPos);
-                                // System.out.println(xPos);
-                                lines.add(line);
-                                text = text.substring(index);
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        int xPos = (buttonWidth - textWidth) / 2;
-                        linePositions.put(text, xPos);
-                        lines.add(text);
-                        break;
-                    }
-                    textWidth = fontDetails.stringWidth(text);
-                }
-                int lineHeight = fontDetails.getHeight();
-                int numLines = lines.size();
-                int buttonHeight = lineHeight * numLines + insets.top + insets.bottom;
-                // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
-                setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-                setMaximumSize(new Dimension(buttonWidth, buttonHeight));
-
-                System.out.println(buttonWidth + ", " + buttonHeight);
-                // Graphics g = getGraphics();
-                g.setColor(secondary);
-                g.fillRoundRect(0, 0, buttonWidth, buttonHeight, buttonArcRadius, buttonArcRadius);
-                g.setColor(primary);
-                g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
-                                buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
-                                buttonArcRadius, buttonArcRadius);
-
-                // comp.setPreferredSize(new Dimension(100, 100));
-                for (int index = 0; index < lines.size(); index += 1) {
-                    String line = lines.get(index);
-                    System.out.print("Line " + index + ": " + line);
-                    int xPos = linePositions.get(line);
-                    int yPos = insets.top + (index + 1) * lineHeight;
-                    System.out.println(" : " + "Pos " + xPos + " " + yPos);
-                    g.setFont(font);
-                    g.setColor(textColor);
-                    g.drawString(line, xPos, yPos);
-                }
-                
-            }
-        };
-        resize(button, size);
-        return button;
-    }
-
-    // Assumes centered orientation
-    private static void drawButton(JButton button, int size) {
-        FontMetrics fontDetails = button.getFontMetrics(font);
-        String text = button.getText();
-        ArrayList<String> lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-        Insets insets = size == SMALL_BUTTON ? smallButtonInsets : mediumButtonInsets;
-        int maxTextWidth = size == SMALL_BUTTON ? maxLineWidthSmall : maxLineWidthMed;
-        int buttonWidth = maxTextWidth + insets.left + insets.right;
-        // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
-
-
-        int textWidth = fontDetails.stringWidth(text);
-        HashMap<String, Integer> linePositions = new HashMap<String, Integer>();
-        while (text.length() > 0) {
-            if (textWidth > maxTextWidth) {
-                String line = "";
-                for (int index = 0; index < text.length(); index += 1) {
-                    line = text.substring(0, index);
-                    int width = fontDetails.stringWidth(line);
-                    if (width > maxTextWidth) {
-                        int xPos = (buttonWidth - width) / 2;
-                        linePositions.put(line, xPos);
-                        // System.out.println(xPos);
-                        lines.add(line);
-                        text = text.substring(index);
-                        break;
-                    }
-                }
-            }
-            else {
-                int xPos = (buttonWidth - textWidth) / 2;
-                linePositions.put(text, xPos);
-                lines.add(text);
-                break;
-            }
-            textWidth = fontDetails.stringWidth(text);
-        }
-        int lineHeight = fontDetails.getHeight();
-        int numLines = lines.size();
-        int buttonHeight = lineHeight * numLines + insets.top + insets.bottom;
-        button.setMinimumSize(new Dimension(buttonWidth - (insets.left + insets.right) / 2, buttonHeight - (insets.top + insets.bottom) / 2));
-        button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-        button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
-
-        System.out.println(buttonWidth + ", " + buttonHeight);
-        Graphics g = button.getGraphics();
-        g.setColor(secondary);
-        g.fillRoundRect(0, 0, buttonWidth, buttonHeight, buttonArcRadius, buttonArcRadius);
-        g.setColor(primary);
-        g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
-                        buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
-                        buttonArcRadius, buttonArcRadius);
-
-        // comp.setPreferredSize(new Dimension(100, 100));
-        for (int index = 0; index < lines.size(); index += 1) {
-            String line = lines.get(index);
-            System.out.print("Line " + index + ": " + line);
-            int xPos = linePositions.get(line);
-            int yPos = insets.top + (index + 1) * lineHeight;
-            System.out.println(" : " + "Pos " + xPos + " " + yPos);
-            g.setFont(font);
-            g.setColor(textColor);
-            g.drawString(line, xPos, yPos);
-        }
-
-    }
-    public static Color getPrimary() {
-        return primary;
-    }
-    
-    public static Color getSecondary() {
-        return secondary;
-    }
-
-    public static Color getTertiary() {
-        return tertiary;
-    }*/
 
     public static void main(String[] args) {
         init();
@@ -337,7 +140,7 @@ public class GUI {
         // constrs.weighty = 1;
         // constrs.gr
         // JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", SMALL_BUTTON);
-        FCPButton testButton = new FCPButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", FCPButton.SMALL_BUTTON);
+        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.SMALL_BUTTON);
         // testButton = new JButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         // testButton.setMinimumSize(new Dimension(100, 75));
         testButton.addActionListener(new ActionListener() {
@@ -347,12 +150,15 @@ public class GUI {
                 System.out.println("activated");
             }
         });
-        testButton.setBorderPainted(true);
+        FCPButton medButton = new FCPButton("woohoo", FCPButton.MEDIUM_BUTTON);
         testPanel.add(testButton);
-        int xPos = ((int) dim.getWidth() - testButton.getButtonWidth()) / 2;
+        testPanel.add(medButton);
+        int middle = (int) dim.getWidth() / 2;
         // System.out.println(testButton.getWidth());
         springLayout.putConstraint(SpringLayout.NORTH, testButton, 15, SpringLayout.NORTH, testPanel);
-        springLayout.putConstraint(SpringLayout.WEST, testButton, xPos, SpringLayout.WEST, testPanel);
+        springLayout.putConstraint(SpringLayout.WEST, testButton, middle - testButton.getButtonWidth() / 2, SpringLayout.WEST, testPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, medButton, 15, SpringLayout.SOUTH, testButton);
+        springLayout.putConstraint(SpringLayout.WEST, medButton, middle - medButton.getButtonWidth() / 2, SpringLayout.WEST, testPanel);
         // testPanel.add(testButton, constrs);
         // System.out.println("bangah " + testButton.getWidth() + " " + testButton.getHeight());
         frame.setContentPane(testPanel);
