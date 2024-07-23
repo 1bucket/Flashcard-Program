@@ -14,19 +14,27 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Box;
 import javax.swing.SpringLayout;
+import java.awt.Toolkit;
 
 public class GUI {
     // public static final int SMALL_BUTTON = 0;
     // public static final int MEDIUM_BUTTON = 1;
 
+    // current vision: colors ascend in brightness
+    // button colors
     private static Color primary;
     private static Color secondary;
+    // background/other colors
     private static Color tertiary;
+    private static Color quaternary;
+    private static Color quinary;
+    private static Color senary;
+    private static Color septenary;
+    private static Color octonary;
 
     private static int smallButtonInset;
     private static int mediumButtonInset;
@@ -45,6 +53,11 @@ public class GUI {
         primary = Color.RED;
         secondary = Color.BLUE;
         tertiary = Color.GREEN;
+        quaternary = Color.CYAN;
+        quinary = Color.PINK;
+        senary = Color.ORANGE;
+        septenary = Color.YELLOW;
+        octonary = Color.MAGENTA;
 
         mediumButtonInset = 12;
         smallButtonInset = 10;
@@ -74,6 +87,26 @@ public class GUI {
 
     public static Color tertiary() {
         return tertiary;
+    }
+
+    public static Color quaternary() {
+        return quaternary;
+    }
+
+    public static Color quinary() {
+        return quinary;
+    }
+
+    public static Color senary() {
+        return senary;
+    }
+
+    public static Color septenary() {
+        return septenary;
+    }
+
+    public static Color octonary() {
+        return octonary;
     }
 
     public static int smallButtonInset() {
@@ -126,8 +159,8 @@ public class GUI {
 
 
         JFrame frame = new JFrame("test");
-        Dimension dim = new Dimension(800, 600);
-        JPanel testPanel = new JPanel();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        JPanel testPanel = new FCPBackground();
         SpringLayout springLayout = new SpringLayout();
         testPanel.setLayout(springLayout);
         // testPanel.setLayout(null);
