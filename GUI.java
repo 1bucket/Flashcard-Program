@@ -22,7 +22,7 @@ import java.awt.Toolkit;
 
 public class GUI {
     // public static final int SMALL_BUTTON = 0;
-    // public static final int MEDIUM_BUTTON = 1;
+    // public static final int MEDIUM = 1;
 
     // current vision: colors ascend in brightness
     // button colors
@@ -182,7 +182,7 @@ public class GUI {
         // constrs.weighty = 1;
         // constrs.gr
         // JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", SMALL_BUTTON);
-        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.SMALL_BUTTON);
+        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.SMALL);
         // testButton = new JButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         // testButton.setMinimumSize(new Dimension(100, 75));
         testButton.addActionListener(new ActionListener() {
@@ -192,7 +192,8 @@ public class GUI {
                 System.out.println("activated");
             }
         });
-        FCPButton medButton = new FCPButton("woohoo", FCPButton.MEDIUM_BUTTON);
+        FCPLabel medButton = new FCPLabel("woohoo", FCPButton.MEDIUM);
+        // testButton.setEnabled(false);
         testPanel.add(testButton);
         testPanel.add(medButton);
         int middle = (int) dim.getWidth() / 2;

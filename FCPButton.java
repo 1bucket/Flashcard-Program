@@ -23,8 +23,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
 public class FCPButton extends JButton implements MouseListener{
-    public static final int SMALL_BUTTON = 0;
-    public static final int MEDIUM_BUTTON = 1;
+    public static final int SMALL = 0;
+    public static final int MEDIUM = 1;
 
     private String textLabel;
     private int size;
@@ -46,12 +46,14 @@ public class FCPButton extends JButton implements MouseListener{
         this.size = size;
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
-        font = GUI.font().deriveFont((float) (size == SMALL_BUTTON ? GUI.smallFontSize() : GUI.mediumFontSize()));
-        inset = size == SMALL_BUTTON ? GUI.smallButtonInset() : GUI.mediumButtonInset();
+        font = GUI.font().deriveFont((float) (size == SMALL ? GUI.smallFontSize() : GUI.mediumFontSize()));
+        inset = size == SMALL ? GUI.smallButtonInset() : GUI.mediumButtonInset();
         // System.out.println(font.getSize());
         resize();
         state = ButtonState.NONE;
-        addMouseListener(this);
+        if (isEnabled()) {
+            addMouseListener(this);
+        }
     }
 
     public int getButtonWidth() {
@@ -66,8 +68,8 @@ public class FCPButton extends JButton implements MouseListener{
         FontMetrics fontDetails = getFontMetrics(font);
         // String text = getText();
         // lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-        // Insets insets = size == SMALL_BUTTON ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
-        int maxTextWidth = size == SMALL_BUTTON ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
+        // Insets insets = size == SMALL ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
+        int maxTextWidth = size == SMALL ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
         // maxTextWidth -= 2 * GUI.textBuffer() + 4;
         buttonWidth = maxTextWidth + 2 * (inset + GUI.textBuffer());
         buttonBorderThickness = inset / 2;
@@ -187,50 +189,59 @@ public class FCPButton extends JButton implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        mousePressed(e);
-        mouseReleased(e);
+        if (isEnabled()) {
+            mousePressed(e);
+            mouseReleased(e);
+        }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (state == ButtonState.PRESSED) {
-            return;
+        if (isEnabled()) {
+            if (state == ButtonState.PRESSED) {
+                return;
+            }
+            else {
+                state = ButtonState.ENTERED;
+                System.out.println("entered");
+                revalidate();
+                repaint();
+            }
         }
-        else {
-            state = ButtonState.ENTERED;
-            System.out.println("entered");
-            revalidate();
-            repaint();
-        }
-        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if (state == ButtonState.PRESSED) {
-            return;
-        }
-        else {
-            state = ButtonState.NONE;
-            System.out.println("exited");
-            revalidate();
-            repaint();
+        if (isEnabled()) {
+            if (state == ButtonState.PRESSED) {
+                return;
+            }
+            else {
+                state = ButtonState.NONE;
+                System.out.println("exited");
+                revalidate();
+                repaint();
+            }
         }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        state = ButtonState.PRESSED;
-        System.out.println("pressed");
-        revalidate();
-        repaint();
+        if (isEnabled()) {
+            state = ButtonState.PRESSED;
+            System.out.println("pressed");
+            revalidate();
+            repaint();
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        state = ButtonState.ENTERED;
-        System.out.println("released");
-        revalidate();
-        repaint();
+        if (isEnabled()) {
+            state = ButtonState.ENTERED;
+            System.out.println("released");
+            revalidate();
+            repaint();
+        }
     }
 }
