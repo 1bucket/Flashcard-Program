@@ -93,7 +93,7 @@ public class FCPButton extends JButton implements MouseListener{
                         linePositions.put(line, xPos);
                         lines.add(line);
                         text = text.substring(index);
-                        System.out.println(text);
+                        // System.out.println(text);
                         break;
                     }
                 }

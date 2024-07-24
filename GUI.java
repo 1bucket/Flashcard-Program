@@ -59,6 +59,15 @@ public class GUI {
         septenary = Color.YELLOW;
         octonary = Color.MAGENTA;
 
+        // first custom theme
+        primary = new Color(163, 127, 196);
+        secondary = new Color(109, 57, 157);
+        tertiary = new Color(166, 121, 208);
+        quaternary = new Color(192, 125, 255);
+        quinary = new Color(178, 123, 228);
+        senary = new Color(194, 152, 232);
+        septenary = new Color(118, 66, 166);
+
         mediumButtonInset = 12;
         smallButtonInset = 10;
         maxLineWidthSmall = 100;
