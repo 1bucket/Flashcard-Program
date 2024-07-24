@@ -20,25 +20,31 @@ public class MainMenu extends Page {
         getMasterPanel().setVisible(false);
 
         // Master Panel
-        JPanel master = new JPanel();
+        // JPanel master = new JPanel();
+        FCPBackground master = new FCPBackground();
         
         master.setLayout(new BoxLayout(master, BoxLayout.PAGE_AXIS));
         setMasterPanel(master);
 
         // Buttons
-        JButton quit = new JButton("Quit");
+        // JButton quit = new JButton("Quit");
+        FCPButton quit = new FCPButton("Quit", FCPButton.MEDIUM);
         quit.addActionListener(new Quit());
 
-        JButton manage = new JButton("Manage Flashcards");
+        // JButton manage = new JButton("Manage Flashcards");
+        FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.MEDIUM);
         manage.addActionListener(new ToManage());
 
-        JButton start = new JButton("Start studying");
+        // JButton start = new JButton("Start studying");
+        FCPButton start = new FCPButton("Start studying", FCPButton.MEDIUM);
         start.addActionListener(new ToStudy());
 
         // Labels
-        JLabel title = new JLabel("Flashcards");
+        // JLabel title = new JLabel("Flashcards");
+        FCPLabel title = new FCPLabel("Flashcards", FCPButton.MEDIUM);
         title.setFont(new Font("Comic Sans", Font.PLAIN, 40));
-        JLabel subtitle = new JLabel("A simple Java program!");
+        // JLabel subtitle = new JLabel("A simple Java program!");
+        FCPLabel subtitle = new FCPLabel("A simple Java program!", FCPLabel.MEDIUM);
         subtitle.setFont(new Font("Comic Sans", Font.PLAIN, 20));
 
         // Subpanels

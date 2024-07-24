@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 
 public class Driver {
     public static void main(String[] args) {
+        GUI.init();
         JFrame frame = new JFrame();
         Page.setFrame(frame);
         new MainMenu();
