@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.Box;
 import javax.swing.SpringLayout;
 import java.awt.Toolkit;
+import java.awt.Container;
 
 public class GUI {
     // public static final int SMALL_BUTTON = 0;
@@ -60,7 +61,7 @@ public class GUI {
         octonary = Color.MAGENTA;
 
         // first custom theme
-        primary = new Color(163, 127, 196);
+        primary = new Color(218, 179, 255);
         secondary = new Color(109, 57, 157);
         tertiary = new Color(166, 121, 208);
         quaternary = new Color(192, 125, 255);
@@ -71,7 +72,7 @@ public class GUI {
         mediumButtonInset = 12;
         smallButtonInset = 10;
         maxLineWidthSmall = 100;
-        maxLineWidthMed = 150;
+        maxLineWidthMed = 200;
         // for (Font font : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
         //     System.out.println(font);
         // }
@@ -182,7 +183,7 @@ public class GUI {
         // constrs.weighty = 1;
         // constrs.gr
         // JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", SMALL_BUTTON);
-        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.SMALL);
+        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.MEDIUM);
         // testButton = new JButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         // testButton.setMinimumSize(new Dimension(100, 75));
         testButton.addActionListener(new ActionListener() {
@@ -192,7 +193,7 @@ public class GUI {
                 System.out.println("activated");
             }
         });
-        FCPLabel medButton = new FCPLabel("woohoo", FCPButton.MEDIUM);
+        FCPLabel medButton = new FCPLabel("woohoo", FCPLabel.MEDIUM);
         // testButton.setEnabled(false);
         testPanel.add(testButton);
         testPanel.add(medButton);
