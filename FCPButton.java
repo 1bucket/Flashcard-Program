@@ -82,45 +82,76 @@ public class FCPButton extends JButton implements MouseListener{
         // Insets insets = size == SMALL ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
         int maxTextWidth = size == SMALL ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
         // maxTextWidth -= 2 * GUI.textBuffer() + 4;
-        buttonWidth = maxTextWidth + 2 * (inset + GUI.textBuffer());
         buttonBorderThickness = inset / 2;
+        buttonWidth = maxTextWidth + 2 * (inset + GUI.textBuffer());
         // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
 
-        String text = textLabel;
+
+        String text = new String(textLabel) + " ";
         int textWidth = fontDetails.stringWidth(text);
         // linePositions = new HashMap<String, Integer>();
+        int widestLineLength = maxTextWidth;
         while (text.length() > 0) {
             // System.out.println(textWidth);
             // System.out.println(text);
+            // System.out.println(text + ", " + (textWidth >= maxTextWidth));
             if (textWidth >= maxTextWidth) {
                 String line = "";
-                for (int index = 0; index < text.length() + 1; index += 1) {
-                    line = text.substring(0, index);
-                    // System.out.println(line);
-                    int width = fontDetails.stringWidth(line);
-                    // System.out.println(width);
-                    // System.out.println(maxTextWidth);
+                int index = -1;
+                int width;
+                while (index < text.length()) {
+                    if (text.indexOf(" ", index + 1) == -1) {
+                        index += 1;
+                        // System.out.println("a");
+                    }
+                    else {
+                        // System.out.println("b");
+                        index = text.indexOf(" ", index + 1);
+                    }
+                    // System.out.println(index);
+                    line = text.substring(0, index + 1);
+                    width = fontDetails.stringWidth(line);
                     if (width + 10 >= maxTextWidth) {
-                        // System.out.println("boop");
-                        int xPos = (buttonWidth - width) / 2;
-                        linePositions.put(line, xPos);
+                        line = line.trim();
+                        width = fontDetails.stringWidth(line);
+                        if (width > widestLineLength) {
+                            widestLineLength = width;
+                        }
+                        // int xPos = (buttonWidth - width) / 2;
+                        // linePositions.put(line, xPos);
                         lines.add(line);
-                        text = text.substring(index);
-                        // System.out.println(text);
+                        text = text.substring(index + 1);
                         break;
                     }
+                    // System.exit(0);
                 }
+                // for (int index = 0; index < text.length() + 1; index += 1) {
+                //     line = text.substring(0, index);
+                //     int width = fontDetails.stringWidth(line);
+                //     if (width + 10 >= maxTextWidth) {
+                //         int xPos = (buttonWidth - width) / 2;
+                //         linePositions.put(line, xPos);
+                //         lines.add(line);
+                //         text = text.substring(index);
+                //         break;
+                //     }
+                // }
             }
             else {
-                int xPos = (buttonWidth - textWidth) / 2;
-                linePositions.put(text, xPos);
-                lines.add(text);
+                // int xPos = (buttonWidth - textWidth) / 2;
+                // linePositions.put(text, xPos);
+                lines.add(text.trim());
                 break;
             }
             textWidth = fontDetails.stringWidth(text);
         }
         lineHeight = fontDetails.getHeight();
+        buttonWidth = widestLineLength + 2 * (inset + GUI.textBuffer());
         buttonHeight = lineHeight * lines.size() + 2 * inset + GUI.textBuffer();
+        for (String line : lines) {
+            // System.out.println("|" + line + "|");
+            linePositions.put(line, (buttonWidth - fontDetails.stringWidth(line)) / 2);
+        }
         // System.out.println(numLines);
         // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
         setPreferredSize(new Dimension(buttonWidth, buttonHeight));

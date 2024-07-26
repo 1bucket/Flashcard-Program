@@ -62,7 +62,7 @@ public class GUI {
 
         // first custom theme
         primary = new Color(218, 179, 255);
-        secondary = new Color(109, 57, 157);
+        secondary = new Color(99, 36, 156);
         tertiary = new Color(166, 121, 208);
         quaternary = new Color(192, 125, 255);
         quinary = new Color(178, 123, 228);
