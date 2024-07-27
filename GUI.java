@@ -197,12 +197,17 @@ public class GUI {
         // testButton.setEnabled(false);
         testPanel.add(testButton);
         testPanel.add(medButton);
+        FCPScrollPane testScroll = new FCPScrollPane();
+        testScroll.setPreferredSize(new Dimension(300, 400));
+        testPanel.add(testScroll);
         int middle = (int) dim.getWidth() / 2;
         // System.out.println(testButton.getWidth());
         springLayout.putConstraint(SpringLayout.NORTH, testButton, 15, SpringLayout.NORTH, testPanel);
         springLayout.putConstraint(SpringLayout.WEST, testButton, middle - testButton.getButtonWidth() / 2, SpringLayout.WEST, testPanel);
         springLayout.putConstraint(SpringLayout.NORTH, medButton, 15, SpringLayout.SOUTH, testButton);
         springLayout.putConstraint(SpringLayout.WEST, medButton, middle - medButton.getButtonWidth() / 2, SpringLayout.WEST, testPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, testScroll, 15, SpringLayout.SOUTH, medButton);
+        springLayout.putConstraint(SpringLayout.WEST, testScroll, 15, SpringLayout.WEST, testPanel);
         // testPanel.add(testButton, constrs);
         // System.out.println("bangah " + testButton.getWidth() + " " + testButton.getHeight());
         frame.setContentPane(testPanel);
