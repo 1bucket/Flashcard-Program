@@ -28,6 +28,10 @@ public class GUI {
     // public static final int SMALL_BUTTON = 0;
     // public static final int MEDIUM = 1;
 
+    private static Color dominant;
+    private static Color complement;
+    private static Color accent;
+
     // current vision: colors ascend in brightness
     // button colors
     private static Color primary;
@@ -54,6 +58,11 @@ public class GUI {
     private static int textBuffer;
 
     public static void init() {
+        dominant = Color.BLACK;
+        complement = new Color(99, 36, 156);
+        accent = Color.WHITE;
+
+
         primary = Color.RED;
         secondary = Color.BLUE;
         tertiary = Color.GREEN;
@@ -162,6 +171,18 @@ public class GUI {
         return buttonBorderThickness;
     }
     */
+
+    public static Color offsetBrightness(Color color, double doubleOffset) {
+        float offset = (float) doubleOffset;
+        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue());
+        if (offset > 0) {
+            hsb[2] = Math.min(hsb[2] + doubleOffset, 255);
+        }
+        else {
+            hsb[2] = Math.max(hsb[2] + doubleOffset, 0);
+        }
+        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+    }
 
     public static int textBuffer() {
         return textBuffer;
