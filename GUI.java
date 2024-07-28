@@ -20,6 +20,9 @@ import javax.swing.Box;
 import javax.swing.SpringLayout;
 import java.awt.Toolkit;
 import java.awt.Container;
+import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUI {
     // public static final int SMALL_BUTTON = 0;
@@ -211,6 +214,26 @@ public class GUI {
         // testPanel.add(testButton, constrs);
         // System.out.println("bangah " + testButton.getWidth() + " " + testButton.getHeight());
         frame.setContentPane(testPanel);
+        // System.out.println(testPanel.getComponentCount());
+        // System.out.println(testButton + ", " + medButton + ", " + testScroll + "|");
+        // for (Component comp : testPanel.getComponents()) {
+        //     System.out.println(comp);
+        // }
+        for (int index = 0; index < 5; index += 1) {
+            FCPButton button = new FCPButton("woo", FCPButton.SMALL);
+            testScroll.add(button);
+            if (index == 3) {
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        button.setPreferredSize(new Dimension((int) button.getPreferredSize().getWidth() * 2, (int) button.getPreferredSize().getHeight() * 2));
+                    }
+                });
+            }
+        }
+        // testScroll.add(new FCButton(new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png")));
+        
+        testScroll.adjustChildrenPositions();
         frame.setPreferredSize(dim);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
