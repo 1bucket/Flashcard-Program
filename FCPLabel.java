@@ -8,7 +8,7 @@ public class FCPLabel extends FCPButton{
     }
 
     public FCPLabel(String textLabel, int size, Color textColor) {
-        this(textLabel, size, textColor, null, null);
+        this(textLabel, size, textColor, Color.RED, Color.RED);
         setTransparent(true);
     }
 }

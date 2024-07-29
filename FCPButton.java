@@ -37,9 +37,12 @@ public class FCPButton extends JButton implements MouseListener{
 
     private int buttonWidth, buttonHeight;
     private int buttonBorderThickness;
+    private int textBuffer;
     private boolean squishBordered;
     private int inset;
     private Font font;
+    private boolean rigidWidth;
+    private boolean rigidHeight;
 
     private ButtonState state;
     private boolean transparent;
@@ -51,12 +54,15 @@ public class FCPButton extends JButton implements MouseListener{
         this.textColor = textColor;
         this.fillColor = fillColor;
         this.borderColor = borderColor;
+        textBuffer = GUI.textBuffer();
         transparent = false;
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
+        rigidWidth = rigidHeight = false;
         font = GUI.font().deriveFont((float) (size == SMALL ? GUI.smallFontSize() : GUI.mediumFontSize()));
         inset = size == SMALL ? GUI.smallButtonInset() : GUI.mediumButtonInset();
         squishBordered = true;
+        buttonWidth = buttonHeight = -1;
         // System.out.println(font.getSize());
         resize();
         state = ButtonState.NONE;
@@ -65,12 +71,54 @@ public class FCPButton extends JButton implements MouseListener{
         }
     }
 
+    public void setFontSize(int newSize) {
+        font = GUI.font().deriveFont((float) newSize);
+        resize();
+    }
+
     public int getButtonWidth() {
         return buttonWidth;
     }
 
     public int getButtonHeight() {
         return buttonHeight;
+    }
+
+    public void setButtonWidth(int newWidth) {
+        buttonWidth = newWidth;
+        rigidWidth = true;
+        resize();
+    }
+
+    public void setButtonHeight(int newHeight) {
+        buttonHeight = newHeight;
+        rigidHeight = true;
+        resize();
+    }
+
+    public void setButtonDims(Dimension dim) {
+        buttonWidth = (int) dim.getWidth();
+        buttonHeight = (int) dim.getHeight();
+        rigidWidth = rigidHeight = true;
+        resize();
+    }
+
+    public void restoreDefaultWidth() {
+        buttonWidth = -1;
+        rigidWidth = false;
+        resize();
+    }
+
+    public void restoreDefaultHeight() {
+        buttonHeight = -1;
+        rigidHeight = false;
+        resize();
+    }
+
+    public void restoreDefaultDims() {
+        buttonWidth = buttonHeight = -1;
+        rigidWidth = rigidHeight = false;
+        resize();
     }
 
     public boolean isSquishBordered() {
@@ -91,13 +139,21 @@ public class FCPButton extends JButton implements MouseListener{
 
     private void resize() {
         FontMetrics fontDetails = getFontMetrics(font);
+        lines = new ArrayList<String>();
+        linePositions = new HashMap<String, Integer>();
         // String text = getText();
         // lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
         // Insets insets = size == SMALL ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
-        int maxTextWidth = size == SMALL ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
+        int maxTextWidth;
+        if (!rigidWidth) {
+            maxTextWidth = size == SMALL ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
+            buttonWidth = maxTextWidth + 2 * (inset + textBuffer);
+        }
+        else {
+            maxTextWidth = buttonWidth - 2 * (inset + textBuffer);
+        }
         // maxTextWidth -= 2 * GUI.textBuffer() + 4;
         buttonBorderThickness = inset / 2;
-        buttonWidth = maxTextWidth + 2 * (inset + GUI.textBuffer());
         // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
 
 
@@ -125,7 +181,7 @@ public class FCPButton extends JButton implements MouseListener{
                     // System.out.println(index);
                     line = text.substring(0, index + 1);
                     width = fontDetails.stringWidth(line);
-                    if (width + 10 >= maxTextWidth) {
+                    if (width + 2 * textBuffer >= maxTextWidth) {
                         line = line.trim();
                         width = fontDetails.stringWidth(line);
                         if (width > widestLineLength) {
@@ -160,8 +216,12 @@ public class FCPButton extends JButton implements MouseListener{
             textWidth = fontDetails.stringWidth(text);
         }
         lineHeight = fontDetails.getHeight();
-        buttonWidth = widestLineLength + 2 * (inset + GUI.textBuffer());
-        buttonHeight = lineHeight * lines.size() + 2 * inset + GUI.textBuffer();
+        if (! rigidWidth) {
+            buttonWidth = widestLineLength + 2 * (inset + textBuffer);
+        }
+        if (!rigidHeight) {
+            buttonHeight = lineHeight * lines.size() + 2 * inset + textBuffer;
+        }
         // default text alignment
         textAlignLeft();
 

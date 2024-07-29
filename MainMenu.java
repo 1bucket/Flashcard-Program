@@ -32,26 +32,30 @@ public class MainMenu extends Page {
         // Buttons
         // JButton quit = new JButton("Quit");
         Color buttonFill = GUI.offsetBrightness(GUI.secondary(), -.9);
-        FCPButton quit = new FCPButton("Quit", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
+        FCPButton quit = new FCPButton("End Session", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         quit.addActionListener(new Quit());
+        quit.setButtonWidth(200);
 
         // JButton manage = new JButton("Manage Flashcards");
         FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         manage.addActionListener(new ToManage());
+        manage.setButtonWidth(200);
 
         // JButton start = new JButton("Start studying");
         FCPButton start = new FCPButton("Quick Study", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         start.addActionListener(new ToStudy());
+        start.setButtonWidth(200);
 
         // Labels
         // JLabel title = new JLabel("Flashcards");
-        FCPLabel title = new FCPLabel("Flashcards", FCPLabel.MEDIUM, GUI.secondary(), GUI.offsetBrightness(GUI.secondary(), -.1), GUI.secondary());
+        FCPLabel title = new FCPLabel("Flashcards", FCPLabel.MEDIUM, GUI.secondary());
         title.setFont(new Font("Comic Sans", Font.PLAIN, 40));
-        title.setTransparent(true);
+        // title.setTransparent(true);
+        title.setFontSize(70);
         // JLabel subtitle = new JLabel("A simple Java program!");
         FCPLabel subtitle = new FCPLabel("A simple Java program!", FCPLabel.SMALL, Color.WHITE);
         subtitle.setFont(new Font("Comic Sans", Font.PLAIN, 20));
-        subtitle.setTransparent(true);
+        // subtitle.setTransparent(true);
 
         master.add(title);
         master.add(subtitle);
