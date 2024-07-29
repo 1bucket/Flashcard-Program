@@ -28,10 +28,6 @@ public class GUI {
     // public static final int SMALL_BUTTON = 0;
     // public static final int MEDIUM = 1;
 
-    private static Color dominant;
-    private static Color complement;
-    private static Color accent;
-
     // current vision: colors ascend in brightness
     // button colors
     private static Color primary;
@@ -58,31 +54,31 @@ public class GUI {
     private static int textBuffer;
 
     public static void init() {
-        dominant = Color.BLACK;
-        complement = new Color(99, 36, 156);
-        accent = Color.WHITE;
+        primary = new Color(20, 20, 20);
+        secondary = offsetBrightness(new Color(99, 36, 156), -.1);
+        tertiary = new Color(240, 240, 240);
 
 
-        primary = Color.RED;
-        secondary = Color.BLUE;
-        tertiary = Color.GREEN;
-        quaternary = Color.CYAN;
-        quinary = Color.PINK;
-        senary = Color.ORANGE;
-        septenary = Color.YELLOW;
-        octonary = Color.MAGENTA;
+        // primary = Color.RED;
+        // secondary = Color.BLUE;
+        // tertiary = Color.GREEN;
+        // quaternary = Color.CYAN;
+        // quinary = Color.PINK;
+        // senary = Color.ORANGE;
+        // septenary = Color.YELLOW;
+        // octonary = Color.MAGENTA;
 
         // first custom theme
-        primary = new Color(218, 179, 255);
-        secondary = new Color(99, 36, 156);
-        tertiary = new Color(166, 121, 208);
-        quaternary = new Color(192, 125, 255);
-        quinary = new Color(178, 123, 228);
-        senary = new Color(194, 152, 232);
-        septenary = new Color(118, 66, 166);
+        // primary = new Color(218, 179, 255);
+        // secondary = new Color(99, 36, 156);
+        // tertiary = new Color(166, 121, 208);
+        // quaternary = new Color(192, 125, 255);
+        // quinary = new Color(178, 123, 228);
+        // senary = new Color(194, 152, 232);
+        // septenary = new Color(118, 66, 166);
 
-        mediumButtonInset = 12;
-        smallButtonInset = 10;
+        mediumButtonInset = 8;
+        smallButtonInset = 6;
         maxLineWidthSmall = 100;
         maxLineWidthMed = 200;
         // for (Font font : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
@@ -174,12 +170,12 @@ public class GUI {
 
     public static Color offsetBrightness(Color color, double doubleOffset) {
         float offset = (float) doubleOffset;
-        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue());
+        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         if (offset > 0) {
-            hsb[2] = Math.min(hsb[2] + doubleOffset, 255);
+            hsb[2] = (float) Math.min(hsb[2] + doubleOffset, 255);
         }
         else {
-            hsb[2] = Math.max(hsb[2] + doubleOffset, 0);
+            hsb[2] = (float) Math.max(hsb[2] + doubleOffset, 0);
         }
         return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
     }
@@ -207,7 +203,7 @@ public class GUI {
         // constrs.weighty = 1;
         // constrs.gr
         // JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", SMALL_BUTTON);
-        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.MEDIUM);
+        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.MEDIUM, Color.WHITE, offsetBrightness(secondary, .01), secondary);
         // testButton = new JButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         // testButton.setMinimumSize(new Dimension(100, 75));
         testButton.addActionListener(new ActionListener() {
@@ -217,7 +213,8 @@ public class GUI {
                 System.out.println("activated");
             }
         });
-        FCPLabel medButton = new FCPLabel("woohoo", FCPLabel.MEDIUM);
+        FCPLabel medButton = new FCPLabel("woohoo", FCPLabel.MEDIUM, Color.WHITE, offsetBrightness(secondary, .01), secondary);
+        medButton.setTransparent(true);
         // testButton.setEnabled(false);
         testPanel.add(testButton);
         testPanel.add(medButton);
@@ -241,7 +238,7 @@ public class GUI {
         //     System.out.println(comp);
         // }
         for (int index = 0; index < 5; index += 1) {
-            FCPButton button = new FCPButton("woo", FCPButton.SMALL);
+            FCPButton button = new FCPButton("woo", FCPButton.SMALL, Color.WHITE, offsetBrightness(secondary, .01), secondary);
             testScroll.add(button);
             if (index == 3) {
                 button.addActionListener(new ActionListener() {

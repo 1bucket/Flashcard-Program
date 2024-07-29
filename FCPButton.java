@@ -29,6 +29,7 @@ public class FCPButton extends JButton implements MouseListener{
 
     private String textLabel;
     private int size;
+    private Color fillColor, textColor, borderColor;
 
     private ArrayList<String> lines;
     private HashMap<String, Integer> linePositions;
@@ -41,11 +42,16 @@ public class FCPButton extends JButton implements MouseListener{
     private Font font;
 
     private ButtonState state;
+    private boolean transparent;
 
-    public FCPButton(String textLabel, int size) {
+    public FCPButton(String textLabel, int size, Color textColor, Color fillColor, Color borderColor) {
         super();
         this.textLabel = textLabel;
         this.size = size;
+        this.textColor = textColor;
+        this.fillColor = fillColor;
+        this.borderColor = borderColor;
+        transparent = false;
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
         font = GUI.font().deriveFont((float) (size == SMALL ? GUI.smallFontSize() : GUI.mediumFontSize()));
@@ -73,6 +79,14 @@ public class FCPButton extends JButton implements MouseListener{
 
     public void setSquishBordered(boolean newValue) {
         squishBordered = newValue;
+    }
+
+    public void setTransparent(boolean newValue) {
+        transparent = newValue;
+    }
+
+    public boolean isTransparent() {
+        return transparent;
     }
 
     private void resize() {
@@ -148,14 +162,29 @@ public class FCPButton extends JButton implements MouseListener{
         lineHeight = fontDetails.getHeight();
         buttonWidth = widestLineLength + 2 * (inset + GUI.textBuffer());
         buttonHeight = lineHeight * lines.size() + 2 * inset + GUI.textBuffer();
-        for (String line : lines) {
-            // System.out.println("|" + line + "|");
-            linePositions.put(line, (buttonWidth - fontDetails.stringWidth(line)) / 2);
-        }
+        // default text alignment
+        textAlignLeft();
+
+        // for (String line : lines) {
+        //     // System.out.println("|" + line + "|");
+        //     linePositions.put(line, (buttonWidth - fontDetails.stringWidth(line)) / 2);
+        // }
         // System.out.println(numLines);
         // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
         setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+    }
+
+    public void textAlignLeft() {
+        for (String line : lines) {
+            linePositions.put(line, inset + 5);
+        }
+    }
+
+    public void textAlignCenter() {
+        for (String line : lines) {
+            linePositions.put(line, (buttonWidth - getFontMetrics(font).stringWidth(line)) / 2);
+        }
     }
 
     @Override
@@ -164,61 +193,70 @@ public class FCPButton extends JButton implements MouseListener{
         // System.out.println("painting " + state);
         // int buttonWidth = getWidth();
         // int buttonHeight = getHeight();
-        Color primary = GUI.primary();
-        Color secondary = GUI.secondary();
-        Color buttonPrimary = primary;
-        Color buttonSecondary = secondary;
+        // Color primary = GUI.primary();
+        // Color secondary = GUI.secondary();
+        // Color buttonPrimary = primary;
+        // Color buttonBorder = secondary;
+        Color buttonFill = fillColor;
+        Color buttonBorder = borderColor;
         if (state == ButtonState.ENTERED) {
-            float[] hsb = Color.RGBtoHSB(primary.getRed(), primary.getGreen(), primary.getBlue(), null);
-            // System.out.println(hsb[2]);
-            hsb[2] = Math.max(0, hsb[2] - (float) 0.05);
-            // System.out.println(hsb[2]);
-            buttonPrimary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            hsb = Color.RGBtoHSB(secondary.getRed(), secondary.getGreen(), secondary.getBlue(), null);
-            hsb[2] = Math.max(0, hsb[2] - (float) 0.05);
-            // System.out.println(hsb[2]);
-            buttonSecondary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            // buttonPrimary = new Color(primary.getRed() + 10, primary.getGreen() + 10, primary.getBlue() + 10);
-            // buttonSecondary = new Color(secondary.getRed() + 10, secondary.getGreen() + 10, secondary.getBlue() + 10);
+            buttonBorder = GUI.offsetBrightness(buttonBorder, -.05);
+            buttonFill = GUI.offsetBrightness(buttonFill, -.05);
+
+            // float[] hsb = Color.RGBtoHSB(primary.getRed(), primary.getGreen(), primary.getBlue(), null);
+            // // System.out.println(hsb[2]);
+            // hsb[2] = Math.max(0, hsb[2] - (float) 0.05);
+            // // System.out.println(hsb[2]);
+            // buttonPrimary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+            // hsb = Color.RGBtoHSB(secondary.getRed(), secondary.getGreen(), secondary.getBlue(), null);
+            // hsb[2] = Math.max(0, hsb[2] - (float) 0.05);
+            // // System.out.println(hsb[2]);
+            // buttonSecondary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+            // // buttonPrimary = new Color(primary.getRed() + 10, primary.getGreen() + 10, primary.getBlue() + 10);
+            // // buttonSecondary = new Color(secondary.getRed() + 10, secondary.getGreen() + 10, secondary.getBlue() + 10);
         }
         else if (state == ButtonState.NONE) {
-            buttonPrimary = primary;
-            buttonSecondary = secondary;
+            // buttonPrimary = primary;
+            // buttonSecondary = secondary;
         }
         else if (state == ButtonState.PRESSED) {
-            float[] hsb = Color.RGBtoHSB(primary.getRed(), primary.getGreen(), primary.getBlue(), null);
-            hsb[2] = Math.max(0, hsb[2] - (float) 0.1);
-            buttonPrimary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            hsb = Color.RGBtoHSB(secondary.getRed(), secondary.getGreen(), secondary.getBlue(), null);
-            hsb[2] = Math.max(0, hsb[2] - (float) 0.1);
-            buttonSecondary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            // buttonPrimary = new Color(primary.getRed() + 20, primary.getGreen() + 20, primary.getBlue() + 20);
-            // buttonSecondary = new Color(secondary.getRed() + 20, secondary.getGreen() + 20, secondary.getBlue() + 20);
+            buttonFill = GUI.offsetBrightness(buttonFill, -0.1);
+            buttonBorder = GUI.offsetBrightness(buttonBorder, -0.1);
+
+            // float[] hsb = Color.RGBtoHSB(primary.getRed(), primary.getGreen(), primary.getBlue(), null);
+            // hsb[2] = Math.max(0, hsb[2] - (float) 0.1);
+            // buttonPrimary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+            // hsb = Color.RGBtoHSB(secondary.getRed(), secondary.getGreen(), secondary.getBlue(), null);
+            // hsb[2] = Math.max(0, hsb[2] - (float) 0.1);
+            // buttonSecondary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+            // // buttonPrimary = new Color(primary.getRed() + 20, primary.getGreen() + 20, primary.getBlue() + 20);
+            // // buttonSecondary = new Color(secondary.getRed() + 20, secondary.getGreen() + 20, secondary.getBlue() + 20);
         }
         else if (state == ButtonState.FOCUSED) {
 
         }
         // System.out.println(buttonPrimary + ", " + buttonSecondary);
-        if (squishBordered) {
-            g.setColor(buttonSecondary);
-            if (state != ButtonState.PRESSED) {
-                g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
-                                buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
-                                GUI.buttonArcRadius(), GUI.buttonArcRadius());
+        if (!transparent) {
+            if (squishBordered) {
+                g.setColor(buttonBorder);
+                if (state != ButtonState.PRESSED) {
+                    g.fillRoundRect(buttonBorderThickness, buttonBorderThickness, 
+                                    buttonWidth - 2 * buttonBorderThickness, buttonHeight - 2 * buttonBorderThickness, 
+                                    GUI.buttonArcRadius(), GUI.buttonArcRadius());
+                }
+                else {
+                    g.fillRoundRect(0, 0, buttonWidth, buttonHeight, GUI.buttonArcRadius(), GUI.buttonArcRadius());
+                }
             }
-            else {
-                g.fillRoundRect(0, 0, buttonWidth, buttonHeight, GUI.buttonArcRadius(), GUI.buttonArcRadius());
-            }
+
+            g.setColor(buttonFill);
+            g.fillRoundRect(2 * buttonBorderThickness, 2 * buttonBorderThickness, 
+                            buttonWidth - 2 * inset, buttonHeight - 2 * inset, 
+                            GUI.buttonArcRadius(), GUI.buttonArcRadius());
         }
-
-        g.setColor(buttonPrimary);
-        g.fillRoundRect(2 * buttonBorderThickness, 2 * buttonBorderThickness, 
-                        buttonWidth - 2 * inset, buttonHeight - 2 * inset, 
-                        GUI.buttonArcRadius(), GUI.buttonArcRadius());
-
         // comp.setPreferredSize(new Dimension(100, 100));
         g.setFont(font);
-        g.setColor(GUI.textColor());
+        g.setColor(textColor);
         for (int index = 0; index < lines.size(); index += 1) {
             String line = lines.get(index);
             // System.out.print("Line " + index + ": " + line);

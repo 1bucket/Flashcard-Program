@@ -31,24 +31,26 @@ public class MainMenu extends Page {
 
         // Buttons
         // JButton quit = new JButton("Quit");
-        FCPButton quit = new FCPButton("Quit", FCPButton.SMALL);
+        FCPButton quit = new FCPButton("Quit", FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
         quit.addActionListener(new Quit());
 
         // JButton manage = new JButton("Manage Flashcards");
-        FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.SMALL);
+        FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
         manage.addActionListener(new ToManage());
 
         // JButton start = new JButton("Start studying");
-        FCPButton start = new FCPButton("Start studying", FCPButton.SMALL);
+        FCPButton start = new FCPButton("Quick Study", FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
         start.addActionListener(new ToStudy());
 
         // Labels
         // JLabel title = new JLabel("Flashcards");
-        FCPLabel title = new FCPLabel("Flashcards", FCPLabel.MEDIUM);
+        FCPLabel title = new FCPLabel("Flashcards", FCPLabel.MEDIUM, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
         title.setFont(new Font("Comic Sans", Font.PLAIN, 40));
+        title.setTransparent(true);
         // JLabel subtitle = new JLabel("A simple Java program!");
-        FCPLabel subtitle = new FCPLabel("A simple Java program!", FCPLabel.MEDIUM);
+        FCPLabel subtitle = new FCPLabel("A simple Java program!", FCPLabel.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
         subtitle.setFont(new Font("Comic Sans", Font.PLAIN, 20));
+        subtitle.setTransparent(true);
 
         master.add(title);
         master.add(subtitle);
@@ -56,16 +58,16 @@ public class MainMenu extends Page {
         master.add(manage);
         master.add(quit);
 
-        springLayout.putConstraint(SpringLayout.NORTH, title, 45, SpringLayout.NORTH, master);
-        springLayout.putConstraint(SpringLayout.WEST, title, 300, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.NORTH, title, 150, SpringLayout.NORTH, master);
+        springLayout.putConstraint(SpringLayout.WEST, title, 200, SpringLayout.WEST, master);
         springLayout.putConstraint(SpringLayout.NORTH, subtitle, 10, SpringLayout.SOUTH, title);
-        springLayout.putConstraint(SpringLayout.WEST, subtitle, 300, SpringLayout.WEST, master);
-        springLayout.putConstraint(SpringLayout.NORTH, start, 15, SpringLayout.SOUTH, subtitle);
-        springLayout.putConstraint(SpringLayout.WEST, start, 300, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.WEST, subtitle, 200, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.NORTH, start, 45, SpringLayout.SOUTH, subtitle);
+        springLayout.putConstraint(SpringLayout.WEST, start, 200, SpringLayout.WEST, master);
         springLayout.putConstraint(SpringLayout.NORTH, manage, 10, SpringLayout.SOUTH, start);
-        springLayout.putConstraint(SpringLayout.WEST, manage, 300, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.WEST, manage, 200, SpringLayout.WEST, master);
         springLayout.putConstraint(SpringLayout.NORTH, quit, 10, SpringLayout.SOUTH, manage);
-        springLayout.putConstraint(SpringLayout.WEST, quit, 300, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.WEST, quit, 200, SpringLayout.WEST, master);
 
         setMasterPanel(master);
 

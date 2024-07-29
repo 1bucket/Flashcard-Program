@@ -32,33 +32,33 @@ public class FCPBackground extends JPanel {
         //bubbly background
         // g.setClip(-100, -100, width + 200, height + 200);
         // set background color
-        g.setColor(GUI.octonary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), -.02));
         g.fillRect(0, 0, width, height);
 
         // action 1
-        g.setColor(GUI.quaternary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), -.01));
         g.fillArc(width / 3, height / 10, width, height, 90, 100);
         // action 2
-        g.setColor(GUI.septenary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), .02));
         g.fillOval(width * 4 / 7, height / 3, height, height);
         // action 3
-        g.setColor(GUI.quinary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), .03));
         g.fillArc(width * 2 / 3, height / - 2, width * 2 / 3, height, 180, 90);
         // action 4
-        g.setColor(GUI.quinary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), .02));
         g.fillArc(width / 10, height * 3 / 5, width * 4 / 5, height * 4 / 5, 0, 180);
         // action 5
-        g.setColor(GUI.tertiary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), .04));
         g.fillOval(width / 10, height / 10, width / 2, width / 2);
         // action 6
-        g.setColor(GUI.septenary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), .027));
         g.fillArc(width * -2 / 5, height * -2 / 3, width * 4 / 5, height * 4 / 3, 270, 90);
         // action 0
-        g.setColor(GUI.senary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), .018));
         // g.fillRect(0, 0, width, height);
         g.fillArc(width * 2 / 7, height * -2 / 5, width * 3 / 7, width * 3 / 7, 180, 180);
         // action 7
-        g.setColor(GUI.senary());
+        g.setColor(GUI.offsetBrightness(GUI.primary(), -.015));
         g.fillArc(width / -3, height * 3 / 7, width * 2 / 3, width * 2 / 3, 270, 180);
 
     }
