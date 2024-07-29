@@ -31,24 +31,25 @@ public class MainMenu extends Page {
 
         // Buttons
         // JButton quit = new JButton("Quit");
-        FCPButton quit = new FCPButton("Quit", FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
+        Color buttonFill = GUI.offsetBrightness(GUI.secondary(), -.9);
+        FCPButton quit = new FCPButton("Quit", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         quit.addActionListener(new Quit());
 
         // JButton manage = new JButton("Manage Flashcards");
-        FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
+        FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         manage.addActionListener(new ToManage());
 
         // JButton start = new JButton("Start studying");
-        FCPButton start = new FCPButton("Quick Study", FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
+        FCPButton start = new FCPButton("Quick Study", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         start.addActionListener(new ToStudy());
 
         // Labels
         // JLabel title = new JLabel("Flashcards");
-        FCPLabel title = new FCPLabel("Flashcards", FCPLabel.MEDIUM, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
+        FCPLabel title = new FCPLabel("Flashcards", FCPLabel.MEDIUM, GUI.secondary(), GUI.offsetBrightness(GUI.secondary(), -.1), GUI.secondary());
         title.setFont(new Font("Comic Sans", Font.PLAIN, 40));
         title.setTransparent(true);
         // JLabel subtitle = new JLabel("A simple Java program!");
-        FCPLabel subtitle = new FCPLabel("A simple Java program!", FCPLabel.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), .01), GUI.secondary());
+        FCPLabel subtitle = new FCPLabel("A simple Java program!", FCPLabel.SMALL, Color.WHITE);
         subtitle.setFont(new Font("Comic Sans", Font.PLAIN, 20));
         subtitle.setTransparent(true);
 
@@ -59,9 +60,9 @@ public class MainMenu extends Page {
         master.add(quit);
 
         springLayout.putConstraint(SpringLayout.NORTH, title, 150, SpringLayout.NORTH, master);
-        springLayout.putConstraint(SpringLayout.WEST, title, 200, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.WEST, title, 193, SpringLayout.WEST, master);
         springLayout.putConstraint(SpringLayout.NORTH, subtitle, 10, SpringLayout.SOUTH, title);
-        springLayout.putConstraint(SpringLayout.WEST, subtitle, 200, SpringLayout.WEST, master);
+        springLayout.putConstraint(SpringLayout.WEST, subtitle, 195, SpringLayout.WEST, master);
         springLayout.putConstraint(SpringLayout.NORTH, start, 45, SpringLayout.SOUTH, subtitle);
         springLayout.putConstraint(SpringLayout.WEST, start, 200, SpringLayout.WEST, master);
         springLayout.putConstraint(SpringLayout.NORTH, manage, 10, SpringLayout.SOUTH, start);

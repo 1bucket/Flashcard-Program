@@ -6,4 +6,9 @@ public class FCPLabel extends FCPButton{
         setEnabled(false);
         setSquishBordered(false);
     }
+
+    public FCPLabel(String textLabel, int size, Color textColor) {
+        this(textLabel, size, textColor, null, null);
+        setTransparent(true);
+    }
 }

@@ -54,8 +54,8 @@ public class GUI {
     private static int textBuffer;
 
     public static void init() {
-        primary = new Color(20, 20, 20);
-        secondary = offsetBrightness(new Color(99, 36, 156), -.1);
+        primary = new Color(10, 10, 10);
+        secondary = offsetBrightness(new Color(99, 36, 156), 0.3);
         tertiary = new Color(240, 240, 240);
 
 
