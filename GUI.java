@@ -190,7 +190,7 @@ public class GUI {
 
         JFrame frame = new JFrame("test");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        JPanel testPanel = new FCPBackground();
+        FCPBackground testPanel = new FCPBackground();
         SpringLayout springLayout = new SpringLayout();
         testPanel.setLayout(springLayout);
         // testPanel.setLayout(null);
@@ -219,16 +219,18 @@ public class GUI {
         testPanel.add(testButton);
         testPanel.add(medButton);
         FCPScrollPane testScroll = new FCPScrollPane();
-        testScroll.setPreferredSize(new Dimension(300, 400));
-        testPanel.add(testScroll);
+        testScroll.setPreferredSize(new Dimension(440 + 2 * textBuffer, 600));
+        FCPPanel testFCPPanel = new FCPPanel(Color.BLACK);
+        testFCPPanel.add(testScroll);
+        testPanel.add(testFCPPanel);
         int middle = (int) dim.getWidth() / 2;
         // System.out.println(testButton.getWidth());
         springLayout.putConstraint(SpringLayout.NORTH, testButton, 15, SpringLayout.NORTH, testPanel);
         springLayout.putConstraint(SpringLayout.WEST, testButton, middle - testButton.getButtonWidth() / 2, SpringLayout.WEST, testPanel);
         springLayout.putConstraint(SpringLayout.NORTH, medButton, 15, SpringLayout.SOUTH, testButton);
         springLayout.putConstraint(SpringLayout.WEST, medButton, middle - medButton.getButtonWidth() / 2, SpringLayout.WEST, testPanel);
-        springLayout.putConstraint(SpringLayout.NORTH, testScroll, 15, SpringLayout.SOUTH, medButton);
-        springLayout.putConstraint(SpringLayout.WEST, testScroll, 15, SpringLayout.WEST, testPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, testFCPPanel, 15, SpringLayout.SOUTH, medButton);
+        springLayout.putConstraint(SpringLayout.WEST, testFCPPanel, 15, SpringLayout.WEST, testPanel);
         // testPanel.add(testButton, constrs);
         // System.out.println("bangah " + testButton.getWidth() + " " + testButton.getHeight());
         frame.setContentPane(testPanel);
@@ -239,17 +241,20 @@ public class GUI {
         // }
         for (int index = 0; index < 5; index += 1) {
             FCPButton button = new FCPButton("woo", FCPButton.SMALL, Color.WHITE, offsetBrightness(secondary, .01), secondary);
-            testScroll.add(button);
+            // testScroll.add(button);
             if (index == 3) {
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        button.setPreferredSize(new Dimension((int) button.getPreferredSize().getWidth() * 2, (int) button.getPreferredSize().getHeight() * 2));
+                        // button.setPreferredSize(new Dimension((int) button.getPreferredSize().getWidth() * 2, (int) button.getPreferredSize().getHeight() * 2));
+                        testPanel.darken();
                     }
                 });
             }
         }
-        // testScroll.add(new FCButton(new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png")));
+        Flashcard fc = new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png");
+        // System.out.println(fc);
+        testScroll.add(new FCButton(fc));
         
         testScroll.adjustChildrenPositions();
         frame.setPreferredSize(dim);

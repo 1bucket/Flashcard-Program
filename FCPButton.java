@@ -37,7 +37,7 @@ public class FCPButton extends JButton implements MouseListener{
 
     private int buttonWidth, buttonHeight;
     private int buttonBorderThickness;
-    private int textBuffer;
+    // private int textBuffer;
     private boolean squishBordered;
     private int inset;
     private Font font;
@@ -54,7 +54,7 @@ public class FCPButton extends JButton implements MouseListener{
         this.textColor = textColor;
         this.fillColor = fillColor;
         this.borderColor = borderColor;
-        textBuffer = GUI.textBuffer();
+        // textBuffer = GUI.textBuffer();
         transparent = false;
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
@@ -76,6 +76,14 @@ public class FCPButton extends JButton implements MouseListener{
         resize();
     }
 
+    public int getButtonSize() {
+        return size;
+    }
+
+    public String getTextLabel() {
+        return textLabel;
+    }
+
     public int getButtonWidth() {
         return buttonWidth;
     }
@@ -84,16 +92,34 @@ public class FCPButton extends JButton implements MouseListener{
         return buttonHeight;
     }
 
+    public int getInset() {
+        return inset;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public Color getFill() {
+        return fillColor;
+    }
+
+    public Color getTextColor() {
+        return textColor;
+    }
+
+    public ArrayList<String> getLines() {
+        return lines;
+    }
+
     public void setButtonWidth(int newWidth) {
         buttonWidth = newWidth;
         rigidWidth = true;
-        resize();
     }
 
     public void setButtonHeight(int newHeight) {
         buttonHeight = newHeight;
         rigidHeight = true;
-        resize();
     }
 
     public void setButtonDims(Dimension dim) {
@@ -127,6 +153,12 @@ public class FCPButton extends JButton implements MouseListener{
 
     public void setSquishBordered(boolean newValue) {
         squishBordered = newValue;
+        if (squishBordered) {
+            inset = size == SMALL ? GUI.smallButtonInset() : GUI.mediumButtonInset();
+        }
+        else {
+            inset = 0;
+        }
     }
 
     public void setTransparent(boolean newValue) {
@@ -137,34 +169,74 @@ public class FCPButton extends JButton implements MouseListener{
         return transparent;
     }
 
-    private void resize() {
+    public void resize() {
         FontMetrics fontDetails = getFontMetrics(font);
-        lines = new ArrayList<String>();
+        // lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
-        // String text = getText();
-        // lines = new ArrayList<String>(); // to maintain correct order for multi-line texts
-        // Insets insets = size == SMALL ? GUI.smallButtonInsets() : GUI.mediumButtonInsets();
         int maxTextWidth;
         if (!rigidWidth) {
             maxTextWidth = size == SMALL ? GUI.maxLineWidthSmall() : GUI.maxLineWidthMed();
-            buttonWidth = maxTextWidth + 2 * (inset + textBuffer);
+            buttonWidth = maxTextWidth + 2 * (inset + GUI.textBuffer());
         }
         else {
-            maxTextWidth = buttonWidth - 2 * (inset + textBuffer);
+            maxTextWidth = buttonWidth - 2 * (inset + GUI.textBuffer());
         }
-        // maxTextWidth -= 2 * GUI.textBuffer() + 4;
         buttonBorderThickness = inset / 2;
-        // int maxTextWidth = comp.getWidth() - 2 * textBuffer;
+        // String text = new String(textLabel) + " ";
+        // int textWidth = fontDetails.stringWidth(text);
+        // int widestLineLength = maxTextWidth;
+        // while (text.length() > 0) {
+        //     if (textWidth >= maxTextWidth) {
+        //         String line = "";
+        //         int index = -1;
+        //         int width;
+        //         while (index < text.length()) {
+        //             if (text.indexOf(" ", index + 1) == -1) {
+        //                 index += 1;
+        //             }
+        //             else {
+        //                 index = text.indexOf(" ", index + 1);
+        //             }
+        //             line = text.substring(0, index + 1);
+        //             width = fontDetails.stringWidth(line);
+        //             if (width + 2 * textBuffer >= maxTextWidth) {
+        //                 line = line.trim();
+        //                 width = fontDetails.stringWidth(line);
+        //                 if (width > widestLineLength) {
+        //                     widestLineLength = width;
+        //                 }
+        //                 lines.add(line);
+        //                 text = text.substring(index + 1);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     else {
+        //         lines.add(text.trim());
+        //         break;
+        //     }
+        //     textWidth = fontDetails.stringWidth(text);
+        // }
+        int widestLineLength = splitIntoLines(textLabel, maxTextWidth, fontDetails, lines);
+        lineHeight = fontDetails.getHeight();
+        if (! rigidWidth) {
+            buttonWidth = widestLineLength + 2 * (inset + GUI.textBuffer());
+        }
+        if (!rigidHeight) {
+            buttonHeight = lineHeight * lines.size() + 2 * inset + GUI.textBuffer();
+        }
+        textAlignLeft();
+        setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+    }
 
 
-        String text = new String(textLabel) + " ";
+    public static int splitIntoLines(String text, int maxTextWidth, FontMetrics fontDetails, ArrayList<String> lineList) {
+        text = new String(text) + " ";
         int textWidth = fontDetails.stringWidth(text);
-        // linePositions = new HashMap<String, Integer>();
         int widestLineLength = maxTextWidth;
+        lineList.clear();
         while (text.length() > 0) {
-            // System.out.println(textWidth);
-            // System.out.println(text);
-            // System.out.println(text + ", " + (textWidth >= maxTextWidth));
             if (textWidth >= maxTextWidth) {
                 String line = "";
                 int index = -1;
@@ -172,67 +244,31 @@ public class FCPButton extends JButton implements MouseListener{
                 while (index < text.length()) {
                     if (text.indexOf(" ", index + 1) == -1) {
                         index += 1;
-                        // System.out.println("a");
                     }
                     else {
-                        // System.out.println("b");
                         index = text.indexOf(" ", index + 1);
                     }
-                    // System.out.println(index);
                     line = text.substring(0, index + 1);
                     width = fontDetails.stringWidth(line);
-                    if (width + 2 * textBuffer >= maxTextWidth) {
+                    if (width + 2 * GUI.textBuffer() >= maxTextWidth) {
                         line = line.trim();
                         width = fontDetails.stringWidth(line);
                         if (width > widestLineLength) {
                             widestLineLength = width;
                         }
-                        // int xPos = (buttonWidth - width) / 2;
-                        // linePositions.put(line, xPos);
-                        lines.add(line);
+                        lineList.add(line);
                         text = text.substring(index + 1);
                         break;
                     }
-                    // System.exit(0);
                 }
-                // for (int index = 0; index < text.length() + 1; index += 1) {
-                //     line = text.substring(0, index);
-                //     int width = fontDetails.stringWidth(line);
-                //     if (width + 10 >= maxTextWidth) {
-                //         int xPos = (buttonWidth - width) / 2;
-                //         linePositions.put(line, xPos);
-                //         lines.add(line);
-                //         text = text.substring(index);
-                //         break;
-                //     }
-                // }
             }
             else {
-                // int xPos = (buttonWidth - textWidth) / 2;
-                // linePositions.put(text, xPos);
-                lines.add(text.trim());
+                lineList.add(text.trim());
                 break;
             }
             textWidth = fontDetails.stringWidth(text);
         }
-        lineHeight = fontDetails.getHeight();
-        if (! rigidWidth) {
-            buttonWidth = widestLineLength + 2 * (inset + textBuffer);
-        }
-        if (!rigidHeight) {
-            buttonHeight = lineHeight * lines.size() + 2 * inset + textBuffer;
-        }
-        // default text alignment
-        textAlignLeft();
-
-        // for (String line : lines) {
-        //     // System.out.println("|" + line + "|");
-        //     linePositions.put(line, (buttonWidth - fontDetails.stringWidth(line)) / 2);
-        // }
-        // System.out.println(numLines);
-        // setMinimumSize(new Dimension(buttonWidth, buttonHeight));
-        setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-        setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+        return widestLineLength;
     }
 
     public void textAlignLeft() {

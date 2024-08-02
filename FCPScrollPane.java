@@ -14,6 +14,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
     private int yInset;
     private int compGap;
     private SpringLayout springLayout;
+    private Color fillColor;
 
     public FCPScrollPane() {
         super();
@@ -22,7 +23,16 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
         xInset = 20;
         yInset = 20;
         compGap = 15;
+        fillColor = Color.BLACK;
         addMouseWheelListener(this);
+    }
+
+    public Color getFill() {
+        return fillColor;
+    }
+
+    public void setFill(Color newFill) {
+        fillColor = newFill;
     }
 
     public void adjustChildrenPositions() {
@@ -43,9 +53,9 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
     @Override
     protected void paintComponent(Graphics g) {
         // super.paintComponent(g);
-        g.setColor(GUI.secondary());
+        g.setColor(fillColor);
         g.fillRect(0, 0, getWidth(), getHeight());
-        paintChildren(g);
+        // paintChildren(g);
         // g.setColor(Color.RED);
         // int[] xPositions = new int[]{0, getWidth(), 0};
         // int[] yPositions = new int[]{0 + scrollOffset, 0 + scrollOffset, getHeight() + scrollOffset};
