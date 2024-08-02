@@ -172,7 +172,7 @@ public class GUI {
         float offset = (float) doubleOffset;
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         if (offset > 0) {
-            hsb[2] = (float) Math.min(hsb[2] + doubleOffset, 255);
+            hsb[2] = (float) Math.min(hsb[2] + doubleOffset, 1);
         }
         else {
             hsb[2] = (float) Math.max(hsb[2] + doubleOffset, 0);
@@ -255,6 +255,8 @@ public class GUI {
         Flashcard fc = new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png");
         // System.out.println(fc);
         testScroll.add(new FCButton(fc));
+        testScroll.add(new SleeveButton(new Sleeve("kablam", "boom")));
+        testScroll.add(new SleeveIcon(offsetBrightness(secondary, -.2)));
         
         testScroll.adjustChildrenPositions();
         frame.setPreferredSize(dim);

@@ -108,6 +108,10 @@ public class FCPButton extends JButton implements MouseListener{
         return textColor;
     }
 
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
     public ArrayList<String> getLines() {
         return lines;
     }
