@@ -68,7 +68,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        scrollOffset -= (int) (1.5 * e.getUnitsToScroll());
+        scrollOffset -= (int) (2 * e.getUnitsToScroll());
         int scrollAllowance = 2 * yInset;
         for (Component comp : getComponents()) {
             scrollAllowance += comp.getPreferredSize().getHeight();

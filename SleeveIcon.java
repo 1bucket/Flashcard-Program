@@ -13,7 +13,7 @@ public class SleeveIcon extends JComponent{
 
     public SleeveIcon(Color back) {
         backColor = back;
-        width = 200;
+        width = 175;
         height = 100;
         arcRad = 20;
         brightnessToggle = 1;
@@ -22,6 +22,10 @@ public class SleeveIcon extends JComponent{
 
     public int getHeight() {
         return height;
+    }
+
+    public int getScaledWidth() {
+        return scaledWidth;
     }
 
     public void scale(double scale) {
@@ -43,7 +47,7 @@ public class SleeveIcon extends JComponent{
         g.fillRoundRect(0, 0, scaledWidth, scaledHeight, scaledArcRad, scaledArcRad);
         g.setColor(GUI.offsetBrightness(backColor, .1 * brightnessToggle));
         g.fillRoundRect(0, 0, scaledWidth * 2 / 5, scaledHeight, scaledArcRad, scaledArcRad);
-        g.fillRoundRect(0, scaledHeight / 5, scaledWidth, scaledHeight * 4 / 5, scaledArcRad, scaledArcRad);
+        g.fillRoundRect(0, scaledHeight / 5, scaledWidth, Math.round((float) scaledHeight * 4 / 5), scaledArcRad, scaledArcRad);
         g.fillRoundRect(0, scaledHeight / 10, scaledWidth * 4 / 5, scaledHeight / 10, scaledArcRad, scaledArcRad);
         g.setColor(backColor);
         g.fillRoundRect(scaledWidth * 2 / 5, 0, scaledWidth * 3 / 5, scaledHeight / 5, scaledArcRad, scaledArcRad);
