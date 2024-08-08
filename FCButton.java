@@ -37,7 +37,7 @@ public class FCButton extends FCPButton implements ActionListener{
 
     // new/changed functionalities
     public FCButton(Flashcard fc) {
-        super(fc.getPrompt(), FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), -.2), GUI.secondary()); // stub
+        super(fc.getPrompt(), FCPButton.SMALL, Color.WHITE, GUI.fcButtonFill(), GUI.fcButtonBorder()); // stub
         this.fc = fc;
         // System.out.println(this.fc);
         open = false;

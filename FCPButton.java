@@ -8,8 +8,8 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.awt.Point;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JFrame;
 import java.awt.GraphicsEnvironment;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -43,9 +43,12 @@ public class FCPButton extends JButton implements MouseListener{
     private Font font;
     private boolean rigidWidth;
     private boolean rigidHeight;
+    // private int checkboxSideLength;
 
     private ButtonState state;
     private boolean transparent;
+    // private boolean selected;
+    // private boolean checkboxed;
 
     public FCPButton(String textLabel, int size, Color textColor, Color fillColor, Color borderColor) {
         super();
@@ -55,7 +58,10 @@ public class FCPButton extends JButton implements MouseListener{
         this.fillColor = fillColor;
         this.borderColor = borderColor;
         // textBuffer = GUI.textBuffer();
+        // checkboxSideLength = 15;
         transparent = false;
+        // checkboxed = false;
+        // selected = false;
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
         rigidWidth = rigidHeight = false;
@@ -186,41 +192,6 @@ public class FCPButton extends JButton implements MouseListener{
             maxTextWidth = buttonWidth - 2 * (inset + GUI.textBuffer());
         }
         buttonBorderThickness = inset / 2;
-        // String text = new String(textLabel) + " ";
-        // int textWidth = fontDetails.stringWidth(text);
-        // int widestLineLength = maxTextWidth;
-        // while (text.length() > 0) {
-        //     if (textWidth >= maxTextWidth) {
-        //         String line = "";
-        //         int index = -1;
-        //         int width;
-        //         while (index < text.length()) {
-        //             if (text.indexOf(" ", index + 1) == -1) {
-        //                 index += 1;
-        //             }
-        //             else {
-        //                 index = text.indexOf(" ", index + 1);
-        //             }
-        //             line = text.substring(0, index + 1);
-        //             width = fontDetails.stringWidth(line);
-        //             if (width + 2 * textBuffer >= maxTextWidth) {
-        //                 line = line.trim();
-        //                 width = fontDetails.stringWidth(line);
-        //                 if (width > widestLineLength) {
-        //                     widestLineLength = width;
-        //                 }
-        //                 lines.add(line);
-        //                 text = text.substring(index + 1);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     else {
-        //         lines.add(text.trim());
-        //         break;
-        //     }
-        //     textWidth = fontDetails.stringWidth(text);
-        // }
         int widestLineLength = splitIntoLines(textLabel, maxTextWidth, fontDetails, lines);
         lineHeight = fontDetails.getHeight();
         if (! rigidWidth) {
@@ -230,6 +201,12 @@ public class FCPButton extends JButton implements MouseListener{
             buttonHeight = lineHeight * lines.size() + 2 * inset + GUI.textBuffer();
         }
         textAlignLeft();
+        // if (checkboxed) {
+        //     for (int index = 0; index < lines.size(); index += 1) {
+        //         linePositions.put(lines.get(index), linePositions.get(lines.get(index)) + checkboxSideLength + 3 * GUI.textBuffer());
+        //     }
+        //     buttonWidth += checkboxSideLength + 3 * GUI.textBuffer();
+        // }
         setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         setMaximumSize(new Dimension(buttonWidth, buttonHeight));
     }
@@ -286,56 +263,39 @@ public class FCPButton extends JButton implements MouseListener{
             linePositions.put(line, (buttonWidth - getFontMetrics(font).stringWidth(line)) / 2);
         }
     }
+/*
+    public void toggleCheckbox() {
+        checkboxed = !checkboxed;
+        resize();
+        revalidate();
+        repaint();
+    }
 
+    public void toggleSelect() {
+        selected = ! selected;
+        revalidate();
+        repaint();
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+*/
     @Override
     protected void paintComponent(Graphics g) {
-        // System.out.println(getLocation().getX() + ", " + getLocation().getY());
-        // System.out.println("painting " + state);
-        // int buttonWidth = getWidth();
-        // int buttonHeight = getHeight();
-        // Color primary = GUI.primary();
-        // Color secondary = GUI.secondary();
-        // Color buttonPrimary = primary;
-        // Color buttonBorder = secondary;
         Color buttonFill = fillColor;
         Color buttonBorder = borderColor;
         if (state == ButtonState.ENTERED) {
             buttonBorder = GUI.offsetBrightness(buttonBorder, -.05);
             buttonFill = GUI.offsetBrightness(buttonFill, -.05);
-
-            // float[] hsb = Color.RGBtoHSB(primary.getRed(), primary.getGreen(), primary.getBlue(), null);
-            // // System.out.println(hsb[2]);
-            // hsb[2] = Math.max(0, hsb[2] - (float) 0.05);
-            // // System.out.println(hsb[2]);
-            // buttonPrimary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            // hsb = Color.RGBtoHSB(secondary.getRed(), secondary.getGreen(), secondary.getBlue(), null);
-            // hsb[2] = Math.max(0, hsb[2] - (float) 0.05);
-            // // System.out.println(hsb[2]);
-            // buttonSecondary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            // // buttonPrimary = new Color(primary.getRed() + 10, primary.getGreen() + 10, primary.getBlue() + 10);
-            // // buttonSecondary = new Color(secondary.getRed() + 10, secondary.getGreen() + 10, secondary.getBlue() + 10);
-        }
-        else if (state == ButtonState.NONE) {
-            // buttonPrimary = primary;
-            // buttonSecondary = secondary;
         }
         else if (state == ButtonState.PRESSED) {
             buttonFill = GUI.offsetBrightness(buttonFill, -0.1);
             buttonBorder = GUI.offsetBrightness(buttonBorder, -0.1);
-
-            // float[] hsb = Color.RGBtoHSB(primary.getRed(), primary.getGreen(), primary.getBlue(), null);
-            // hsb[2] = Math.max(0, hsb[2] - (float) 0.1);
-            // buttonPrimary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            // hsb = Color.RGBtoHSB(secondary.getRed(), secondary.getGreen(), secondary.getBlue(), null);
-            // hsb[2] = Math.max(0, hsb[2] - (float) 0.1);
-            // buttonSecondary = new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-            // // buttonPrimary = new Color(primary.getRed() + 20, primary.getGreen() + 20, primary.getBlue() + 20);
-            // // buttonSecondary = new Color(secondary.getRed() + 20, secondary.getGreen() + 20, secondary.getBlue() + 20);
         }
         else if (state == ButtonState.FOCUSED) {
 
         }
-        // System.out.println(buttonPrimary + ", " + buttonSecondary);
         if (!transparent) {
             if (squishBordered) {
                 g.setColor(buttonBorder);
@@ -355,6 +315,10 @@ public class FCPButton extends JButton implements MouseListener{
                             GUI.buttonArcRadius(), GUI.buttonArcRadius());
         }
         // comp.setPreferredSize(new Dimension(100, 100));
+        // if (checkboxed) {
+        //     g.setColor(GUI.offsetBrightness(Color.BLACK, .05));
+        //     g.drawRect(3 *GUI.textBuffer(), (buttonHeight - checkboxSideLength) / 2, checkboxSideLength, checkboxSideLength);
+        // }
         g.setFont(font);
         g.setColor(textColor);
         for (int index = 0; index < lines.size(); index += 1) {

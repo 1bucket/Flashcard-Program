@@ -40,6 +40,9 @@ public class GUI {
     private static Color septenary;
     private static Color octonary;
 
+    private static Color fcButtonFill;
+    private static Color fcButtonBorder;
+
     private static int smallButtonInset;
     private static int mediumButtonInset;
     private static int maxLineWidthSmall;
@@ -57,6 +60,8 @@ public class GUI {
         primary = new Color(10, 10, 10);
         secondary = offsetBrightness(new Color(99, 36, 156), 0.3);
         tertiary = new Color(240, 240, 240);
+        fcButtonFill = GUI.offsetBrightness(GUI.secondary(), -.2);
+        fcButtonBorder = GUI.secondary();
 
 
         // primary = Color.RED;
@@ -162,6 +167,14 @@ public class GUI {
     public static int buttonArcRadius() {
         return buttonArcRadius;
     }
+
+    public static Color fcButtonFill() {
+        return fcButtonFill;
+    }
+
+    public static Color fcButtonBorder() {
+        return fcButtonBorder;
+    }
     /*
     public static int buttonBorderThickness() {
         return buttonBorderThickness;
@@ -203,7 +216,8 @@ public class GUI {
         // constrs.weighty = 1;
         // constrs.gr
         // JButton testButton = getButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", SMALL_BUTTON);
-        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.MEDIUM, Color.WHITE, offsetBrightness(secondary, .01), secondary);
+        FCPButton testButton = new FCPButton("YIPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", FCPButton.SMALL, Color.WHITE, offsetBrightness(secondary, .01), secondary);
+        // testButton.toggleCheckbox();
         // testButton = new JButton("yippeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         // testButton.setMinimumSize(new Dimension(100, 75));
         testButton.addActionListener(new ActionListener() {
@@ -253,10 +267,15 @@ public class GUI {
             }
         }
         Flashcard fc = new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png");
+        // System.out.println(fc.equals(new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png")));
+        // ArrayList<Flashcard> a = new ArrayList<Flashcard>();
+        // a.add(fc);
+        // System.out.println(a.indexOf(new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png")));
         // System.out.println(fc);
         testScroll.add(new FCButton(fc));
         testScroll.add(new SleeveButton(new Sleeve("kablam", "boom")));
         testScroll.add(new SleeveIcon(offsetBrightness(secondary, -.2)));
+        testScroll.add(new FCPCheckbox());
         
         testScroll.adjustChildrenPositions();
         frame.setPreferredSize(dim);

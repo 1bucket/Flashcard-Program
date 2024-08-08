@@ -7,8 +7,10 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
 import javax.swing.SpringLayout;
 import java.awt.Component;
+import java.awt.event.ComponentListener;
+import java.awt.event.ComponentEvent;
 
-public class FCPScrollPane extends JPanel implements MouseWheelListener{
+public class FCPScrollPane extends JPanel implements MouseWheelListener, ComponentListener{
     private int scrollOffset;
     private int xInset;
     private int yInset;
@@ -51,6 +53,12 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
     }
 
     @Override
+    public Component add(Component comp) {
+        comp.addComponentListener(this);
+        return super.add(comp);
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         // super.paintComponent(g);
         g.setColor(fillColor);
@@ -66,9 +74,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
         // g.fillPolygon(xPositions, yPositions, 3);
     }
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        scrollOffset -= (int) (2 * e.getUnitsToScroll());
+    public void updateScrollAllowance() {
         int scrollAllowance = 2 * yInset;
         for (Component comp : getComponents()) {
             scrollAllowance += comp.getPreferredSize().getHeight();
@@ -83,5 +89,28 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener{
         adjustChildrenPositions();
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        scrollOffset -= (int) (2 * e.getUnitsToScroll());
+        updateScrollAllowance();
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        updateScrollAllowance();
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
     }
 }
