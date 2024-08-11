@@ -35,16 +35,19 @@ public class MainMenu extends Page {
         FCPButton quit = new FCPButton("End Session", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         quit.addActionListener(new Quit());
         quit.setButtonWidth(200);
+        quit.resize();
 
         // JButton manage = new JButton("Manage Flashcards");
         FCPButton manage = new FCPButton("Manage Flashcards", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         manage.addActionListener(new ToManage());
         manage.setButtonWidth(200);
+        manage.resize();
 
         // JButton start = new JButton("Start studying");
         FCPButton start = new FCPButton("Quick Study", FCPButton.SMALL, Color.WHITE, buttonFill, GUI.offsetBrightness(GUI.secondary(), -.2));
         start.addActionListener(new ToStudy());
         start.setButtonWidth(200);
+        start.resize();
 
         // Labels
         // JLabel title = new JLabel("Flashcards");

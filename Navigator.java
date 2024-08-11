@@ -6,32 +6,67 @@ import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.SpringLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import javax.swing.JFrame;
 
 @SuppressWarnings("unchecked")
-public class Navigator extends JPanel implements ActionListener{ 
+public class Navigator extends FCPPanel implements ActionListener{ 
     private String prevPath;
     private String currentPath;
     private Stack<String> nextPaths;
 
-    private JLabel pathLabel;
+    private FCPLabel pathLabel;
 
-    private JButton prevSleeve;
-    private JButton nextSleeve;
+    private FCPButton prevSleeve;
+    private FCPButton nextSleeve;
 
     private Manage manageRoot;
-    private Mover moverRoot;
+    // private Mover moverRoot;
 
     public Navigator(String path, Manage newRoot) {
         this(path);
         manageRoot = newRoot;
     }
-
+    /*
     public Navigator(String path, Mover newRoot) {
         this(path);
         moverRoot = newRoot;
     }
+    */
 
     public Navigator(String path) {
+        super(Color.BLACK);
+        setPreferredSize(new Dimension(250, 200));
+        SpringLayout springLayout = new SpringLayout();
+        setLayout(springLayout);
+        prevPath = null;
+        currentPath = path;
+        nextPaths = new Stack();
+        pathLabel = new FCPLabel("Path: " + currentPath, FCPLabel.SMALL, Color.WHITE);
+        // pathLabel.setTransparent(false);
+        add(pathLabel);
+        prevSleeve = new FCPButton("<", FCPButton.SMALL, Color.WHITE, Color.BLACK, Color.WHITE);
+        prevSleeve.setTransparent(true);
+        // System.out.println(getFontMetrics(prevSleeve.getFont()).stringWidth("<"));
+        prevSleeve.addActionListener(this);
+        add(prevSleeve);
+        nextSleeve = new FCPButton(">", FCPButton.SMALL, Color.WHITE, Color.BLACK, Color.WHITE);
+        nextSleeve.setTransparent(true);
+        nextSleeve.addActionListener(this);
+        add(nextSleeve);
+
+        springLayout.putConstraint(SpringLayout.NORTH, pathLabel, 20, SpringLayout.NORTH, this);
+        springLayout.putConstraint(SpringLayout.WEST, pathLabel, ((int)getPreferredSize().getWidth() - pathLabel.getButtonWidth()) / 2, SpringLayout.WEST, this);
+        springLayout.putConstraint(SpringLayout.NORTH, prevSleeve, 15, SpringLayout.SOUTH, pathLabel);
+        // System.out.println((int)getPreferredSize().getWidth() / 2 - prevSleeve.getButtonWidth() - 5);
+        // System.out.println(getPreferredSize().getWidth() / 2);
+        // System.out.println(prevSleeve.getButtonWidth());
+
+        springLayout.putConstraint(SpringLayout.WEST, prevSleeve, (int)getPreferredSize().getWidth() / 2 - prevSleeve.getButtonWidth() - 5, SpringLayout.WEST, this);
+        springLayout.putConstraint(SpringLayout.NORTH, nextSleeve, 15, SpringLayout.SOUTH, pathLabel);
+        springLayout.putConstraint(SpringLayout.WEST, nextSleeve, (int)getPreferredSize().getWidth() / 2 + 5, SpringLayout.WEST, this);
+        /*
         setLayout(new GridBagLayout());
         GridBagConstraints constrs = new GridBagConstraints();
 
@@ -58,6 +93,7 @@ public class Navigator extends JPanel implements ActionListener{
         constrs.gridx = 0;
         constrs.gridy = 1;
         add(buttonPanel, constrs);
+        */
         refresh();
     }
 
@@ -117,9 +153,20 @@ public class Navigator extends JPanel implements ActionListener{
             manageRoot.setPath(currentPath);
         }
         else {
-            moverRoot.setPath(currentPath);
+            // moverRoot.setPath(currentPath);
         }
         refresh();
+    }
+
+    public static void main(String[] args) {
+        GUI.init();
+        JFrame frame = new JFrame("boop");
+        frame.add(new Navigator("arewi"));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
     }
 
 

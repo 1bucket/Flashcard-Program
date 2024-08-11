@@ -40,11 +40,14 @@ public class FCPPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+        g.setColor(fill);
         if (round) {
             g.fillRoundRect(0, 0, getWidth(), getHeight(), GUI.buttonArcRadius(), GUI.buttonArcRadius());
         }
         else {
             g.fillRect(0, 0, getWidth(), getHeight());
         }
+        // g.setColor(Color.RED);
+        // g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
     }
 }

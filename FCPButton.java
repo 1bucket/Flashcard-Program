@@ -26,6 +26,8 @@ import java.awt.Point;
 public class FCPButton extends JButton implements MouseListener{
     public static final int SMALL = 0;
     public static final int MEDIUM = 1;
+    public static final int BRIGHTEN = 0;
+    public static final int DARKEN = 1;
 
     private String textLabel;
     private int size;
@@ -47,8 +49,14 @@ public class FCPButton extends JButton implements MouseListener{
 
     private ButtonState state;
     private boolean transparent;
+    private int hoverEffect;
     // private boolean selected;
     // private boolean checkboxed;
+
+    public FCPButton(String textLabel, int size, Color textColor) {
+        this(textLabel, size, textColor, Color.RED, Color.RED);
+        setTransparent(true);
+    }
 
     public FCPButton(String textLabel, int size, Color textColor, Color fillColor, Color borderColor) {
         super();
@@ -57,11 +65,8 @@ public class FCPButton extends JButton implements MouseListener{
         this.textColor = textColor;
         this.fillColor = fillColor;
         this.borderColor = borderColor;
-        // textBuffer = GUI.textBuffer();
-        // checkboxSideLength = 15;
+        hoverEffect = DARKEN;
         transparent = false;
-        // checkboxed = false;
-        // selected = false;
         lines = new ArrayList<String>();
         linePositions = new HashMap<String, Integer>();
         rigidWidth = rigidHeight = false;
@@ -69,7 +74,6 @@ public class FCPButton extends JButton implements MouseListener{
         inset = size == SMALL ? GUI.smallButtonInset() : GUI.mediumButtonInset();
         squishBordered = true;
         buttonWidth = buttonHeight = -1;
-        // System.out.println(font.getSize());
         resize();
         state = ButtonState.NONE;
         if (isEnabled()) {
@@ -122,14 +126,22 @@ public class FCPButton extends JButton implements MouseListener{
         return lines;
     }
 
+    @Override
+    public void setText(String text) {
+        textLabel = text;
+        resize();
+    }
+
     public void setButtonWidth(int newWidth) {
         buttonWidth = newWidth;
         rigidWidth = true;
+        // resize();
     }
 
     public void setButtonHeight(int newHeight) {
         buttonHeight = newHeight;
         rigidHeight = true;
+        // resize();
     }
 
     public void setButtonDims(Dimension dim) {
@@ -171,8 +183,15 @@ public class FCPButton extends JButton implements MouseListener{
         }
     }
 
+    public void setHoverEffect(int newEffect) {
+        hoverEffect = newEffect;
+    }
+
     public void setTransparent(boolean newValue) {
         transparent = newValue;
+        if (!transparent) {
+            setSquishBordered(false);
+        }
     }
 
     public boolean isTransparent() {
@@ -193,6 +212,7 @@ public class FCPButton extends JButton implements MouseListener{
         }
         buttonBorderThickness = inset / 2;
         int widestLineLength = splitIntoLines(textLabel, maxTextWidth, fontDetails, lines);
+        // if (textLabel.equals("<")) System.out.println(widestLineLength);
         lineHeight = fontDetails.getHeight();
         if (! rigidWidth) {
             buttonWidth = widestLineLength + 2 * (inset + GUI.textBuffer());
@@ -207,6 +227,7 @@ public class FCPButton extends JButton implements MouseListener{
         //     }
         //     buttonWidth += checkboxSideLength + 3 * GUI.textBuffer();
         // }
+        // if (textLabel.equals("Move")) System.out.println("bWidth: " + buttonWidth);
         setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         setMaximumSize(new Dimension(buttonWidth, buttonHeight));
     }
@@ -215,8 +236,48 @@ public class FCPButton extends JButton implements MouseListener{
     public static int splitIntoLines(String text, int maxTextWidth, FontMetrics fontDetails, ArrayList<String> lineList) {
         text = new String(text) + " ";
         int textWidth = fontDetails.stringWidth(text);
-        int widestLineLength = maxTextWidth;
+        int widestLineLength = -1;
         lineList.clear();
+        while (text.trim().length() > 0) {
+            int lastSpaceIndex = 0;
+            int index = 0;
+            while (index < text.length() && lastSpaceIndex < text.length()) {
+                index = text.indexOf(" ", lastSpaceIndex + 1);
+                if (index < 0) {
+                    break;
+                }
+                String lineCand = text.substring(0, index);
+                // System.out.println(text.substring(0, index));
+                int lineWidth = fontDetails.stringWidth(lineCand);
+                if (index + 1 == text.length()) {
+                    String line = text.substring(0, index);
+                    text = text.substring(index + 1);
+                    lineList.add(line);
+                    if (lineWidth > widestLineLength) {
+                        widestLineLength = lineWidth;
+                    }
+                    break;
+                }
+                else if (lineWidth > maxTextWidth) {
+                    // System.out.println("boop");
+                    String line = text.substring(0, lastSpaceIndex);
+                    text = text.substring(lastSpaceIndex + 1);
+                    lineList.add(line);
+                    if (lineWidth > widestLineLength) {
+                        widestLineLength = lineWidth;
+                    }
+                    break;
+                }
+                else {
+                    // System.out.println("bo");
+                    lastSpaceIndex = index;
+                }
+                // System.out.println(lineList.size());
+                
+            }
+        }
+
+        /*
         while (text.length() > 0) {
             if (textWidth >= maxTextWidth) {
                 String line = "";
@@ -245,16 +306,18 @@ public class FCPButton extends JButton implements MouseListener{
             }
             else {
                 lineList.add(text.trim());
+                widestLineLength = fontDetails.stringWidth(text.trim());
                 break;
             }
             textWidth = fontDetails.stringWidth(text);
         }
-        return widestLineLength;
+        */
+        return Math.max(widestLineLength, maxTextWidth);
     }
 
     public void textAlignLeft() {
         for (String line : lines) {
-            linePositions.put(line, inset + 5);
+            linePositions.put(line, inset + GUI.textBuffer());
         }
     }
 
@@ -263,6 +326,7 @@ public class FCPButton extends JButton implements MouseListener{
             linePositions.put(line, (buttonWidth - getFontMetrics(font).stringWidth(line)) / 2);
         }
     }
+    
 /*
     public void toggleCheckbox() {
         checkboxed = !checkboxed;
@@ -286,12 +350,12 @@ public class FCPButton extends JButton implements MouseListener{
         Color buttonFill = fillColor;
         Color buttonBorder = borderColor;
         if (state == ButtonState.ENTERED) {
-            buttonBorder = GUI.offsetBrightness(buttonBorder, -.05);
-            buttonFill = GUI.offsetBrightness(buttonFill, -.05);
+            buttonBorder = GUI.offsetBrightness(buttonBorder, hoverEffect == DARKEN ? -.05 : .15);
+            buttonFill = GUI.offsetBrightness(buttonFill, hoverEffect == DARKEN ? -.05 : .15);
         }
         else if (state == ButtonState.PRESSED) {
-            buttonFill = GUI.offsetBrightness(buttonFill, -0.1);
-            buttonBorder = GUI.offsetBrightness(buttonBorder, -0.1);
+            buttonFill = GUI.offsetBrightness(buttonFill, hoverEffect == DARKEN ? -0.1 : 0.2);
+            buttonBorder = GUI.offsetBrightness(buttonBorder, hoverEffect == DARKEN ? -0.1 : 0.2);
         }
         else if (state == ButtonState.FOCUSED) {
 
@@ -310,7 +374,9 @@ public class FCPButton extends JButton implements MouseListener{
             }
 
             g.setColor(buttonFill);
-            g.fillRoundRect(2 * buttonBorderThickness, 2 * buttonBorderThickness, 
+            // if (textLabel.equals("Move")) System.out.println("REct widtH:" + (buttonWidth - 2 * inset));
+            int pos = squishBordered ? 2 * buttonBorderThickness : 0;
+            g.fillRoundRect(pos, pos, 
                             buttonWidth - 2 * inset, buttonHeight - 2 * inset, 
                             GUI.buttonArcRadius(), GUI.buttonArcRadius());
         }
@@ -323,9 +389,13 @@ public class FCPButton extends JButton implements MouseListener{
         g.setColor(textColor);
         for (int index = 0; index < lines.size(); index += 1) {
             String line = lines.get(index);
+            // System.out.println(line);
             // System.out.print("Line " + index + ": " + line);
             int xPos = linePositions.get(line);
             int yPos = inset + (index + 1) * lineHeight;
+            if (!squishBordered) {
+                yPos += GUI.textBuffer() - 2;
+            }
             // System.out.println(" : " + "Pos " + xPos + " " + yPos);
             
             g.drawString(line, xPos, yPos);
@@ -355,6 +425,7 @@ public class FCPButton extends JButton implements MouseListener{
                 repaint();
             }
         }
+        // if (textLabel.equals("Move")) System.out.println(getWidth());
     }
 
     @Override
