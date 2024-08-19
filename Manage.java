@@ -197,7 +197,7 @@ public class Manage extends Page implements ActionListener{
 
         constrs.gridx = 0;
         constrs.gridy = 0;
-        navDisp = new Navigator("", this);
+        // navDisp = new Navigator("", this);
         masterPanel.add(navDisp, constrs);
 
         // labels
@@ -564,33 +564,12 @@ public class Manage extends Page implements ActionListener{
 
                 String promptImgPath = scanner.nextLine();
                 if (promptImgPath != "\n") {
-                    // File promptImgs = new File(promptImgsPath);
-                    // if (promptImgs.isDirectory()) {
-                    //     for (String path : promptImgs.list()) {
-                    //         newFC.addImg(path, Flashcard.PROMPT);
-                    //     }
-                    // }
-                    // else {
-                    //     newFC.addImg(promptImgsPath, Flashcard.PROMPT);
-                    // }
                     newFC.setPromptImg(promptImgPath);
                 }
-                // System.out.println("p---\n" + promptImgsPath + "\n---p");
                 String respImgPath = scanner.nextLine();
                 if (respImgPath != "\n") {
-                    // File respImgs = new File(respImgsPath);
-                    // if (respImgs.isDirectory()) {
-                    //     for (String path : respImgs.list()) {
-                    //         newFC.addImg(path, Flashcard.RESP);
-                    //     }
-                    // }
-                    // else {
-                    //     newFC.addImg(respImgsPath, Flashcard.RESP);
-                    // }
                     newFC.setRespImg(respImgPath);
                 }
-                
-                // System.out.println("r---\n" + respImgsPath + "\n---r");
                 }
             scanner.close();
             return masterStack;

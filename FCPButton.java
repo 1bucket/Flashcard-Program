@@ -60,6 +60,7 @@ public class FCPButton extends JButton implements MouseListener{
 
     public FCPButton(String textLabel, int size, Color textColor, Color fillColor, Color borderColor) {
         super();
+        super.setText(textLabel);
         this.textLabel = textLabel;
         this.size = size;
         this.textColor = textColor;
@@ -312,7 +313,8 @@ public class FCPButton extends JButton implements MouseListener{
             textWidth = fontDetails.stringWidth(text);
         }
         */
-        return Math.max(widestLineLength, maxTextWidth);
+        // return Math.max(widestLineLength, maxTextWidth);
+        return widestLineLength;
     }
 
     public void textAlignLeft() {
@@ -345,6 +347,16 @@ public class FCPButton extends JButton implements MouseListener{
         return selected;
     }
 */
+
+    @Override
+    public void setEnabled(boolean b) {
+        super.setEnabled(b);
+        if (!b) {
+            state = ButtonState.NONE;
+            revalidate();
+            repaint();
+        }
+    }
     @Override
     protected void paintComponent(Graphics g) {
         Color buttonFill = fillColor;
@@ -372,7 +384,8 @@ public class FCPButton extends JButton implements MouseListener{
                     g.fillRoundRect(0, 0, buttonWidth, buttonHeight, GUI.buttonArcRadius(), GUI.buttonArcRadius());
                 }
             }
-
+            // g.setColor(Color.WHITE);
+            // g.fillRect(0, 0, buttonWidth, buttonHeight);
             g.setColor(buttonFill);
             // if (textLabel.equals("Move")) System.out.println("REct widtH:" + (buttonWidth - 2 * inset));
             int pos = squishBordered ? 2 * buttonBorderThickness : 0;

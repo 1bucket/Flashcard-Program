@@ -3,6 +3,11 @@ la biblioteca
 library
 images/0000.png
 images/0001.png
+
+boop
+bap
+
+
 not merge test/
 árbol
 tree

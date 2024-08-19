@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.Exception;
+import java.util.ArrayList;
 
 public class FCPCheckbox extends FCPButton implements ActionListener{
     public static final int NONE = -1;
@@ -14,7 +15,8 @@ public class FCPCheckbox extends FCPButton implements ActionListener{
     private boolean selected;
     private Sleeve boundSleeve;
     private Flashcard boundFC;
-    private int type;
+    private ArrayList<CheckboxListener> listeners;
+   /* private int type;
 
     public FCPCheckbox(Sleeve sleeve) {
         this();
@@ -27,10 +29,12 @@ public class FCPCheckbox extends FCPButton implements ActionListener{
         boundFC = fc;
         type = FC;
     }
+    */
 
     public FCPCheckbox() {
         super("", FCPButton.SMALL, Color.RED, GUI.fcButtonFill(), GUI.fcButtonBorder());
-        type = NONE;
+        listeners = new ArrayList<CheckboxListener>();
+        // type = NONE;
         boxSideLength = 15;
         selected = false;
         setSquishBordered(false);
@@ -40,16 +44,29 @@ public class FCPCheckbox extends FCPButton implements ActionListener{
         addActionListener(this);
     }
 
+    public void addCheckboxListener(CheckboxListener listener) {
+        if (listeners.indexOf(listener) == -1) {
+            listeners.add(listener);
+        }
+    }
+
+    public void clearCheckboxListeners() {
+        listeners.clear();
+    }
+
     public boolean isSelected() {
         return selected;
     }
 
     public void toggleSelect() {
         selected = !selected;
+        for (CheckboxListener listener : listeners) {
+            listener.toggleReaction(selected);
+        }
         revalidate();
         repaint();
     }
-
+/*
     public Sleeve getBoundSleeve() throws Exception {
         if (type != SLEEVE) {
             throw new Exception("Error: Checkbox not bound to sleeve; checkbox type is " + type);
@@ -64,6 +81,10 @@ public class FCPCheckbox extends FCPButton implements ActionListener{
         return boundFC;
     }
 
+    public int getType() {
+        return type;
+    }
+*/
     @Override
     protected void paintComponent(Graphics g) {
         // g.setColor(getBorderColor());

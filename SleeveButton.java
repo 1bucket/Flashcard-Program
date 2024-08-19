@@ -3,19 +3,49 @@ import java.awt.Graphics;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class SleeveButton extends FCPButton{
+public class SleeveButton extends FCPButton implements CheckboxListener, ActionListener{
     private Sleeve sleeve;
     private SleeveIcon sleeveIcon;
+    private boolean selected;
+    private SleeveButtonListener listener;
 
     public SleeveButton(Sleeve sleeve) {
         super(sleeve.getName(), FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), -.2), GUI.secondary());
         sleeveIcon = new SleeveIcon(getFill());
+        addActionListener(this);
+        listener = null;
         add(sleeveIcon);
         sleeveIcon.setLocation(GUI.textBuffer(), GUI.textBuffer());
         this.sleeve = sleeve;
         resize();
         setSquishBordered(false);
+    }
+
+    public Sleeve getSleeve() {
+        return sleeve;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+    
+    public void setListener(SleeveButtonListener newListener) {
+        listener = newListener;
+    }
+
+    @Override
+    public void toggleReaction(boolean newValue) {
+        selected = newValue;
+        // System.out.println(sleeve);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // System.out.println("hi");
+        listener.pathChange(sleeve.getPath() + sleeve.getName() + "/");
     }
 
     @Override

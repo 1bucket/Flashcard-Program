@@ -266,7 +266,7 @@ public class GUI {
                 });
             }
         }
-        Flashcard fc = new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png");
+        Flashcard fc = new Flashcard("", "bam", "pow", null, null);
         // System.out.println(fc.equals(new Flashcard("", "bam", "pow", "images/0000.png", "images/0000.png")));
         // ArrayList<Flashcard> a = new ArrayList<Flashcard>();
         // a.add(fc);

@@ -22,7 +22,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
         super();
         setLayout(springLayout = new SpringLayout());
         scrollOffset = 0;
-        xInset = 20;
+        xInset = 10;
         yInset = 20;
         compGap = 15;
         fillColor = Color.BLACK;
