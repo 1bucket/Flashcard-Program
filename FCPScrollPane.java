@@ -17,16 +17,26 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
     private int compGap;
     private SpringLayout springLayout;
     private Color fillColor;
+    private boolean locked;
 
     public FCPScrollPane() {
         super();
         setLayout(springLayout = new SpringLayout());
+        locked = false;
         scrollOffset = 0;
         xInset = 10;
         yInset = 20;
         compGap = 15;
         fillColor = Color.BLACK;
         addMouseWheelListener(this);
+    }
+
+    public void toggleLock() {
+        locked = !locked;
+    }
+
+    public boolean isLocked() {
+        return locked;
     }
 
     public Color getFill() {
@@ -54,6 +64,10 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
 
     @Override
     public Component add(Component comp) {
+        if (locked) {
+            System.out.println("Error: Scroll pane is locked");
+            System.exit(0);
+        }
         comp.addComponentListener(this);
         return super.add(comp);
     }

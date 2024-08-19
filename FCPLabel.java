@@ -11,4 +11,15 @@ public class FCPLabel extends FCPButton{
         this(textLabel, size, textColor, Color.RED, Color.RED);
         setTransparent(true);
     }
+
+    public void append(char c) {
+        setText(getTextLabel() + c);
+        System.out.println(getTextLabel());
+        resize();
+    }
+
+    public void backspace() {
+        setText(getTextLabel().substring(0, getTextLabel().length() - 1));
+        resize();
+    }
 }
