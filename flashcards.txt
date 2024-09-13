@@ -4,10 +4,20 @@ library
 images/0000.png
 images/0001.png
 
+la 
+library
+images/0000.png
+images/0001.png
+
 boop
 bap
 
 
+
+ biblioteca
+library
+images/0000.png
+images/0001.png
 not merge test/
 árbol
 tree

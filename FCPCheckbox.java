@@ -60,6 +60,7 @@ public class FCPCheckbox extends FCPButton implements ActionListener{
 
     public void toggleSelect() {
         selected = !selected;
+        System.out.println("mode: " + selected);
         for (CheckboxListener listener : listeners) {
             listener.toggleReaction(selected);
         }

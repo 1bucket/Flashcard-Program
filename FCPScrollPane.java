@@ -10,7 +10,7 @@ import java.awt.Component;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
 
-public class FCPScrollPane extends JPanel implements MouseWheelListener, ComponentListener{
+public class FCPScrollPane extends FCPPanel implements MouseWheelListener, ComponentListener{
     private int scrollOffset;
     private int xInset;
     private int yInset;
@@ -20,14 +20,15 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
     private boolean locked;
 
     public FCPScrollPane() {
-        super();
+        super(Color.BLACK);
         setLayout(springLayout = new SpringLayout());
         locked = false;
         scrollOffset = 0;
         xInset = 10;
-        yInset = 20;
+        yInset = 10;
         compGap = 15;
         fillColor = Color.BLACK;
+        setOpaque(false);
         addMouseWheelListener(this);
     }
 
@@ -37,6 +38,14 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
 
     public boolean isLocked() {
         return locked;
+    }
+
+    public int getXInset() {
+        return xInset;
+    }
+
+    public int getYInset() {
+        return yInset;
     }
 
     public Color getFill() {
@@ -59,6 +68,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
             else {
                 springLayout.putConstraint(SpringLayout.NORTH, comp, compGap, SpringLayout.SOUTH, comps[index - 1]);
             }
+            // springLayout.putConstraint(SpringLayout.EAST, comp, -xInset, SpringLayout.EAST, this);
         }
     }
 
@@ -72,34 +82,37 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
         return super.add(comp);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        // super.paintComponent(g);
-        g.setColor(fillColor);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        // paintChildren(g);
-        // g.setColor(Color.RED);
-        // int[] xPositions = new int[]{0, getWidth(), 0};
-        // int[] yPositions = new int[]{0 + scrollOffset, 0 + scrollOffset, getHeight() + scrollOffset};
-        // g.fillPolygon(xPositions, yPositions, 3);
-        // g.setColor(Color.BLUE);
-        // xPositions = new int[]{getWidth(), getWidth(), 0};
-        // yPositions = new int[]{0 + scrollOffset, getHeight() + scrollOffset, getHeight() + scrollOffset};
-        // g.fillPolygon(xPositions, yPositions, 3);
-    }
-
-    public void updateScrollAllowance() {
+    public int getScrollAllowance() {
         int scrollAllowance = 2 * yInset;
+        // System.out.println("_");
         for (Component comp : getComponents()) {
             scrollAllowance += comp.getPreferredSize().getHeight();
+            // System.out.println(comp.getPreferredSize().getHeight());
         }
+        // System.out.println("_");
         scrollAllowance += Math.max(0, (getComponentCount() - 1) * compGap);
-        scrollAllowance = Math.max(scrollAllowance - getHeight(), 0);
-        scrollOffset = Math.max(scrollOffset, -scrollAllowance);
+        if (scrollAllowance > getHeight()){ 
+            return scrollAllowance - getHeight() + (getComponentCount() > 1 ? 50 : 0);
+        }
+        else {
+            return 0;
+        }
+        // scrollAllowance = Math.max(scrollAllowance - getHeight(), 0);
+        // System.out.println("h" + getHeight());
+    }
+
+    public void updateScrollOffset() {
+        int scrollAllowance = getScrollAllowance();
         // System.out.println(scrollAllowance);
-        // System.out.println(scrollOffset);
+        scrollOffset = Math.max(scrollOffset, -scrollAllowance);
         scrollOffset = Math.min(0, scrollOffset);
-        // System.out.println("woo " + scrollOffset);
+        adjustChildrenPositions();
+        revalidate();
+        repaint();
+    }
+
+    public void snapToBottom() {
+        scrollOffset = -getScrollAllowance();
         adjustChildrenPositions();
         revalidate();
         repaint();
@@ -108,7 +121,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         scrollOffset -= (int) (2 * e.getUnitsToScroll());
-        updateScrollAllowance();
+        updateScrollOffset();
     }
 
     @Override
@@ -121,7 +134,7 @@ public class FCPScrollPane extends JPanel implements MouseWheelListener, Compone
 
     @Override
     public void componentResized(ComponentEvent e) {
-        updateScrollAllowance();
+        updateScrollOffset();
     }
 
     @Override

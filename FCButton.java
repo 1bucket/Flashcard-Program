@@ -46,6 +46,7 @@ public class FCButton extends FCPButton implements ActionListener, CheckboxListe
         setSquishBordered(false);
         fixedWidth = 400;
         promptLines = getLines();
+        selected = false;
         respLines = new ArrayList<String>();
         // FCPButton.splitIntoLines(fc.getResponse(), getButtonWidth() - 2 * (getInset() + GUI.textBuffer()), getFontMetrics(getFont()), respLines);
         if (fc.getPromptImg() != "") {
@@ -94,8 +95,8 @@ public class FCButton extends FCPButton implements ActionListener, CheckboxListe
             g.setColor(getTextColor());
             // // System.out.println(getTextColor());
             for (int index = 0; index < respLines.size(); index += 1) {
-                yPos += lineHeight;
                 g.drawString(respLines.get(index), xPos, yPos);
+                yPos += lineHeight;
             }
         }
         g.setColor(getFill());
@@ -130,20 +131,18 @@ public class FCButton extends FCPButton implements ActionListener, CheckboxListe
         int height = 2 * (GUI.textBuffer() + getInset());
         FCPButton.splitIntoLines(fc.getPrompt(), fixedWidth, fontDetails, promptLines);
         if (promptImg != null) {
-            promptImgShrinkFactor = (double) fixedWidth / promptImg.getWidth(null);
+            promptImgShrinkFactor = fixedWidth < promptImg.getWidth(null) ? 
+                                        (double) fixedWidth / promptImg.getWidth(null) :
+                                        1;
             height += GUI.textBuffer() + (int) (promptImg.getHeight(null) * promptImgShrinkFactor);
         }
         if (open) {
             FCPButton.splitIntoLines(fc.getResponse(), fixedWidth, fontDetails, respLines);
             height += respLines.size() * lineHeight + 2 * GUI.textBuffer();
-            if (fc.getRespImg().equals("images/0001.png")) {
-                // System.out.println("Width: " + respImg.getWidth(null) + "; Height: " + respImg.getHeight(null));
-            }
             if (respImg != null) {
-                respImgShrinkFactor = (double) fixedWidth / respImg.getWidth(null);
-                if (fc.getRespImg().equals("images/0001.png")) {
-                    // System.out.println("Shrink " + respImgShrinkFactor);
-                }
+                respImgShrinkFactor = fixedWidth < respImg.getWidth(null) ? 
+                                        (double) fixedWidth / respImg.getWidth(null):
+                                        1;
                 // System.out.println("Scaled height " + (int) (respImgShrinkFactor * respImg.getHeight(null)));
                 height += GUI.textBuffer() + (int) (respImg.getHeight(null) * respImgShrinkFactor);
                 // System.out.println(height);
@@ -156,6 +155,7 @@ public class FCButton extends FCPButton implements ActionListener, CheckboxListe
 
     @Override
     public void toggleReaction(boolean newValue) {
+        System.out.println("received: " + newValue);
         selected = newValue;
         // // System.out.println(fc);
     }

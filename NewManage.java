@@ -188,6 +188,7 @@ public class NewManage extends Page implements ActionListener, NavigatorListener
         }
         for (Flashcard fc : fcsWithPath(currentPath)) {
             FCPPanel tray = new FCPPanel(GUI.offsetBrightness(GUI.secondary(), -.8));
+            // FCPPanel tray = new FCPPanel(Color.RED);
             // tray = new FCPPanel(Color.RED);
             tray.unrounden();
             SpringLayout trayLayout = new SpringLayout();
@@ -195,8 +196,8 @@ public class NewManage extends Page implements ActionListener, NavigatorListener
             FCButton fcButton = new FCButton(fc);
             generalFCButtons.add(fcButton);
             FCPCheckbox checkbox = new FCPCheckbox();
-            checkbox.addCheckboxListener(this);
             checkbox.addCheckboxListener(fcButton);
+            checkbox.addCheckboxListener(this);
             tray.add(checkbox);
             trayLayout.putConstraint(SpringLayout.WEST, checkbox, 5, SpringLayout.WEST, tray);
             trayLayout.putConstraint(SpringLayout.NORTH, checkbox, (fcButton.getButtonHeight() - checkbox.getButtonHeight()) / 2, SpringLayout.NORTH, fcButton);
@@ -360,9 +361,12 @@ public class NewManage extends Page implements ActionListener, NavigatorListener
     private void refreshActionDisplay() {
         int numSelectedFCs = 0;
         int numSelectedSleeves = 0;
+        // System.out.println("_");
         for (FCButton fcb : generalFCButtons) {
+            // System.out.println(fcb.isSelected());
             if (fcb.isSelected()) {
                 numSelectedFCs += 1;
+                // System.out.println("sel");
             }
         }
         for (SleeveButton sb : generalSleeveButtons) {
@@ -370,7 +374,8 @@ public class NewManage extends Page implements ActionListener, NavigatorListener
                 numSelectedSleeves += 1;
             }
         }
-        boolean isSelSizeNonzero = numSelectedFCs != 0 || numSelectedSleeves != 0;
+        // System.out.println("_");
+        boolean isSelSizeNonzero = (numSelectedFCs + numSelectedSleeves) != 0;
         boolean selHasNonStudyFCs = false;
         boolean isStudySizeNonzero = studyFCs.size() > 0;
         for (Flashcard candFC : getSelectedFCs()) {
