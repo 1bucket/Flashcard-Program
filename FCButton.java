@@ -15,7 +15,6 @@ import java.io.File;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-// formerly extended JButton
 public class FCButton extends FCPButton implements ActionListener, CheckboxListener{
     private Flashcard fc;
     private boolean open;
@@ -90,8 +89,9 @@ public class FCButton extends FCPButton implements ActionListener, CheckboxListe
             int yPos = promptCardHeight() + GUI.textBuffer();
             if (respImg != null) {
                 g.drawImage(respImg, xPos, yPos, (int) (respImg.getWidth(null) * respImgShrinkFactor), (int) (respImg.getHeight(null) * respImgShrinkFactor), null);
-                yPos += respImg.getHeight(null) * respImgShrinkFactor + GUI.textBuffer() + lineHeight;
+                yPos += respImg.getHeight(null) * respImgShrinkFactor + GUI.textBuffer();
             }
+            yPos += lineHeight;
             g.setColor(getTextColor());
             // // System.out.println(getTextColor());
             for (int index = 0; index < respLines.size(); index += 1) {

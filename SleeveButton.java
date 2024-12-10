@@ -15,6 +15,7 @@ public class SleeveButton extends FCPButton implements CheckboxListener, ActionL
     public SleeveButton(Sleeve sleeve) {
         super(sleeve.getName(), FCPButton.SMALL, Color.WHITE, GUI.offsetBrightness(GUI.secondary(), -.2), GUI.secondary());
         sleeveIcon = new SleeveIcon(getFill());
+        sleeveIcon.flipBrightness();
         addActionListener(this);
         listener = null;
         add(sleeveIcon);

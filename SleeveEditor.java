@@ -3,15 +3,19 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SleeveEditor {
     Sleeve sleeve;
     SpringLayout springL;
+    EditorListener listener;
 
     public SleeveEditor(Sleeve sleeve) {
         this.sleeve = sleeve;
         JFrame frame = new JFrame("Edit Sleeve");
         FCPPanel masterPanel = new FCPPanel(Color.BLACK);
+        masterPanel.unrounden();
         Dimension panelDim = new Dimension(300, 200);
         masterPanel.setPreferredSize(panelDim);
         springL = new SpringLayout();
@@ -32,6 +36,14 @@ public class SleeveEditor {
         tray.setPreferredSize(new Dimension((int) text.getPreferredSize().getWidth() + 2, (int) text.getPreferredSize().getHeight()));
         masterPanel.add(tray);
         FCPButton confirm = new FCPButton("Confirm", FCPButton.SMALL, Color.WHITE, Color.BLACK, GUI.offsetBrightness(GUI.secondary(), -.2));
+        confirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sleeve.setName(text.getText());
+                listener.editConfirmed();
+                frame.dispose();
+            }
+        });
         masterPanel.add(confirm);
 
         springL.putConstraint(SpringLayout.NORTH, prompt, 20, SpringLayout.NORTH, masterPanel);
@@ -48,8 +60,12 @@ public class SleeveEditor {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+    public void setEditorListener(EditorListener newListener) {
+        listener = newListener;
+    }    
 
     public static void main(String[] args) {
         GUI.init();

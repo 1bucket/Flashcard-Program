@@ -130,6 +130,7 @@ public class FCPButton extends JButton implements MouseListener{
     @Override
     public void setText(String text) {
         textLabel = text;
+        resize();
     }
 
     public void setButtonWidth(int newWidth) {

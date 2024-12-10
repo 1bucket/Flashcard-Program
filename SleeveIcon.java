@@ -45,7 +45,7 @@ public class SleeveIcon extends JComponent{
         // System.out.println("bo");
         g.setColor(backColor);
         g.fillRoundRect(0, 0, scaledWidth, scaledHeight, scaledArcRad, scaledArcRad);
-        g.setColor(GUI.offsetBrightness(backColor, .1 * brightnessToggle));
+        g.setColor(GUI.offsetBrightness(backColor, .3 * brightnessToggle));
         g.fillRoundRect(0, 0, scaledWidth * 2 / 5, scaledHeight, scaledArcRad, scaledArcRad);
         g.fillRoundRect(0, scaledHeight / 5, scaledWidth, Math.round((float) scaledHeight * 4 / 5), scaledArcRad, scaledArcRad);
         g.fillRoundRect(0, scaledHeight / 10, scaledWidth * 4 / 5, scaledHeight / 10, scaledArcRad, scaledArcRad);

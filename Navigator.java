@@ -48,6 +48,7 @@ public class Navigator extends FCPPanel implements ActionListener, SleeveButtonL
         currentPath = path;
         nextPaths = new Stack();
         pathLabel = new FCPLabel("Path: " + currentPath, FCPLabel.SMALL, Color.WHITE);
+        pathLabel.setButtonWidth(290);
         // pathLabel.setTransparent(false);
         add(pathLabel);
         prevSleeve = new FCPButton("<", FCPButton.SMALL, Color.WHITE, Color.BLACK, Color.RED);
@@ -67,6 +68,7 @@ public class Navigator extends FCPPanel implements ActionListener, SleeveButtonL
         add(nextSleeve);
 
         // springLayout.putConstraint(SpringLayout.WEST, pathLabel, ((int)getPreferredSize().getWidth() - pathLabel.getButtonWidth()) / 2, SpringLayout.WEST, this);
+        springLayout.putConstraint(SpringLayout.WEST, pathLabel, 5, SpringLayout.WEST, this);
 
         springLayout.putConstraint(SpringLayout.NORTH, prevSleeve, 5, SpringLayout.SOUTH, pathLabel);
         springLayout.putConstraint(SpringLayout.WEST, prevSleeve, (int)getPreferredSize().getWidth() / 2 - prevSleeve.getButtonWidth() - 5, SpringLayout.WEST, this);
@@ -110,6 +112,7 @@ public class Navigator extends FCPPanel implements ActionListener, SleeveButtonL
             label += currentPath;
         }
         pathLabel.setText(label);
+        // System.out.println(label);
         revalidate();
         repaint();
     }

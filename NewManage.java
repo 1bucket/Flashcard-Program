@@ -9,7 +9,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.util.Scanner;
 
-public class NewManage extends Page implements ActionListener, NavigatorListener, CheckboxListener{
+public class NewManage extends Page implements ActionListener, NavigatorListener, CheckboxListener, EditorListener{
     private SpringLayout masterSpringL;
     private FCPBackground masterPanel;
 
@@ -429,7 +429,14 @@ public class NewManage extends Page implements ActionListener, NavigatorListener
 
         }
         else if (cmd.equals(buttonTitles[EDIT])) {
-            
+            ArrayList<Flashcard> selectedFCs = getSelectedFCs();
+            ArrayList<Sleeve> selectedSleeves = getSelectedSleeves();
+            if (selectedFCs.size() == 1) {
+                new FCEditor(selectedFCs.get(0)).setEditorListener(this);
+            }
+            else if (selectedSleeves.size() == 1) {
+                new SleeveEditor(selectedSleeves.get(0)).setEditorListener(this);
+            }
         }
         else if (cmd.equals(buttonTitles[DELETE])) {
             
@@ -462,13 +469,21 @@ public class NewManage extends Page implements ActionListener, NavigatorListener
             
         }
         else if (cmd.equals(buttonTitles[ADDSLEEVE])) {
-            
+            Sleeve newSleeve = new Sleeve(genDisplayNav.getPath(), "");
+            masterSleeves.add(newSleeve);
+            new SleeveEditor(newSleeve).setEditorListener(this);
+            // fix this pls
         }
         else if (cmd.equals(buttonTitles[STUDY])) {
             
         }
         
 
+    }
+
+    @Override
+    public void editConfirmed() {
+        refreshGenDisplay();
     }
 
     @Override

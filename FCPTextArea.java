@@ -54,6 +54,12 @@ public class FCPTextArea extends FCPScrollPane implements ComponentListener, Key
         capped = false;
     }
 
+    @Override
+    public void setPreferredSize(Dimension preferredSize) {
+        super.setPreferredSize(preferredSize);
+        textDisp.setPreferredSize(preferredSize);
+    }
+
     public void setTextLimit(int charLim) {
         textLimit = charLim;
     }
@@ -84,6 +90,7 @@ public class FCPTextArea extends FCPScrollPane implements ComponentListener, Key
         if (!capped) {
             // System.out.println("hep");
             cappedText = textDisp.getText() + String.valueOf(e.getKeyChar());  
+            snapToBottom();
         }
     }
 
@@ -102,7 +109,6 @@ public class FCPTextArea extends FCPScrollPane implements ComponentListener, Key
 
     @Override
     public void componentResized(ComponentEvent e) {
-        snapToBottom();
     }
 
     @Override

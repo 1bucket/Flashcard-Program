@@ -40,6 +40,10 @@ public class FCPScrollPane extends FCPPanel implements MouseWheelListener, Compo
         return locked;
     }
 
+    public int getScrollOffset() {
+        return scrollOffset;
+    }
+
     public int getXInset() {
         return xInset;
     }
@@ -54,6 +58,13 @@ public class FCPScrollPane extends FCPPanel implements MouseWheelListener, Compo
 
     public void setFill(Color newFill) {
         fillColor = newFill;
+    }
+
+    public void setScrollOffset(int newOffset) {
+        scrollOffset = newOffset;
+        adjustChildrenPositions();
+        revalidate();
+        repaint();
     }
 
     public void adjustChildrenPositions() {
