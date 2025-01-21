@@ -20,7 +20,7 @@ public class FCButton extends JButton implements ActionListener{
     private boolean isStudyCard;
     private Manage root;
     private BufferedImage img;
-    static private int imgShrinkFactor = 10;
+    static private int imgShrinkFactor = 3;
 
     // public FCButton(String title, Flashcard fc, boolean isStudyCard) {
     //     this(title, fc, null, isStudyCard);

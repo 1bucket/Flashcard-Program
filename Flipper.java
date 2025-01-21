@@ -143,7 +143,7 @@ public class Flipper extends JPanel implements ActionListener{
                 // super.paintComponent(g);
                 // System.out.println(getWidth() + ", " + getHeight());
                 if (respImg != null) {
-                    System.out.println("nuu");
+                    // System.out.println("nuu");
                     int xPos;
                     int imgWidth = respImg.getWidth(null);
                     int imgHeight = respImg.getHeight(null);
@@ -174,7 +174,7 @@ public class Flipper extends JPanel implements ActionListener{
                     g.drawString(response, (getWidth() - response.length() * 20)/ 2, heightSpace + 40);
                 }
                 else {
-                    System.out.println("wee");
+                    // System.out.println("wee");
                     g.drawString(response, (getWidth() - response.length() * 20) / 2, getHeight() / 2);
                 }
             }

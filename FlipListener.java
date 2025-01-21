@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 
 public class FlipListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-        Page study = Page.getCurPage();
+        Study study = (Study) Page.getCurPage();
         study.flip();
     }
 }
